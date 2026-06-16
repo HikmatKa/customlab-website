@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Custom Lab — Place Your Order</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1a1a1a;
+      min-height: 100vh;
+      color: #1a1a1a;
+    }
+
+    /* HEADER */
+    header {
+      background: #ffffff;
+      padding: 28px 20px 24px;
+      text-align: center;
+      position: relative;
+      border-bottom: 4px solid #E8A830;
+    }
+
+    header::after {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 24px solid transparent;
+      border-right: 24px solid transparent;
+      border-top: 18px solid #E8A830;
+    }
+
+    .logo-area img {
+      height: 140px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* HERO TEXT */
+    .hero {
+      text-align: center;
+      padding: 52px 20px 24px;
+      color: #fff;
+    }
+
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 em {
+      color: #E8A830;
+      font-style: normal;
+    }
+
+    .hero p {
+      font-size: 15px;
+      color: #aaa;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* STEPS STRIP */
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      padding: 28px 20px 0;
+      flex-wrap: wrap;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      min-width: 90px;
+      position: relative;
+    }
+
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 18px;
+      right: -8px;
+      width: 16px;
+      height: 2px;
+      background: #333;
+    }
+
+    .step-num {
+      width: 36px;
+      height: 36px;
+      background: #E8A830;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .step-label {
+      font-size: 11px;
+      color: #888;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* FORM CARD */
+    .card {
+      background: #fff;
+      border-radius: 24px 24px 0 0;
+      max-width: 640px;
+      margin: 36px auto 0;
+      padding: 40px 36px 48px;
+      box-shadow: 0 -4px 40px rgba(0,0,0,0.3);
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #E8A830;
+      margin-bottom: 18px;
+      margin-top: 32px;
+    }
+
+    .section-title:first-child { margin-top: 0; }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    label .required {
+      color: #E8A830;
+      margin-left: 2px;
+    }
+
+    label .hint {
+      font-weight: 400;
+      color: #999;
+      font-size: 12px;
+      margin-left: 6px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid #eee;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      color: #1a1a1a;
+      background: #fafafa;
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #E8A830;
+      background: #fff;
+    }
+
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23999' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+      line-height: 1.5;
+    }
+
+    /* FILE UPLOAD */
+    .upload-box {
+      border: 2px dashed #ddd;
+      border-radius: 12px;
+      padding: 28px 20px;
+      text-align: center;
+      background: #fafafa;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .upload-box:hover {
+      border-color: #E8A830;
+      background: #fffdf5;
+    }
+
+    .upload-box input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .upload-icon { font-size: 32px; margin-bottom: 8px; }
+    .upload-text { font-size: 14px; color: #555; font-weight: 500; }
+    .upload-sub { font-size: 12px; color: #aaa; margin-top: 4px; }
+
+    .upload-preview {
+      margin-top: 12px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: #f0f9f0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #2a7a2a;
+    }
+
+    /* TWO COLUMN */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 520px) {
+      .card { padding: 28px 20px 40px; border-radius: 20px 20px 0 0; }
+      .two-col { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 22px; }
+    }
+
+    /* SUBMIT */
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: #E8A830;
+      color: #1a1a1a;
+      border: none;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 32px;
+      letter-spacing: 0.5px;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+      box-shadow: 0 4px 20px rgba(232,168,48,0.35);
+    }
+
+    .submit-btn:hover {
+      background: #d4941f;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(232,168,48,0.45);
+    }
+
+    .submit-btn:active { transform: translateY(0); }
+
+    .submit-note {
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 14px;
+    }
+
+    /* SUCCESS */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .success-screen .check {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    .success-screen h2 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #1a1a1a;
+    }
+
+    .success-screen p {
+      color: #666;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .success-screen .ig-link {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 12px 28px;
+      background: #E8A830;
+      color: #1a1a1a;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    /* DIVIDER */
+    .divider {
+      border: none;
+      border-top: 1px solid #f0f0f0;
+      margin: 32px 0 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo-area">
+      <img src="logo.png" alt="Custom Lab — Where're Your Pair!" />
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Design Your <em>Custom</em> Air Force 1</h1>
+    <p>Fill in the form below and we'll get back to you with a quote within 24 hours. No payment needed now — just tell us your vision.</p>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-label">Fill Form</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-label">Get Quote</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-label">Confirm</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-label">We Paint</div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-label">Delivered</div>
+    </div>
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="card">
+
+    <form id="orderForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" enctype="multipart/form-data">
+
+      <!-- YOUR INFO -->
+      <div class="section-title">👤 Your Info</div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Full Name <span class="required">*</span></label>
+          <input type="text" name="name" placeholder="e.g. Ahmed Al-Rashid" required />
+        </div>
+        <div class="field">
+          <label>Instagram Handle <span class="hint">(optional)</span></label>
+          <input type="text" name="instagram" placeholder="@yourusername" />
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Email <span class="hint">(optional)</span></label>
+          <input type="email" name="email" placeholder="your@email.com" />
+        </div>
+        <div class="field">
+          <label>Phone / WhatsApp <span class="hint">(optional)</span></label>
+          <input type="tel" name="phone" placeholder="+966 5X XXX XXXX" />
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- SHOE DETAILS -->
+      <div class="section-title">👟 Shoe Details</div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Shoe Size (EU) <span class="required">*</span></label>
+          <select name="shoe_size" required>
+            <option value="" disabled selected>Select size</option>
+            <option>36</option><option>37</option><option>38</option>
+            <option>39</option><option>40</option><option>41</option>
+            <option>42</option><option>43</option><option>44</option>
+            <option>45</option><option>46</option><option>47</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Gender Fit <span class="required">*</span></label>
+          <select name="gender_fit" required>
+            <option value="" disabled selected>Select fit</option>
+            <option>Men's</option>
+            <option>Women's</option>
+            <option>Kids'</option>
+          </select>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- DESIGN -->
+      <div class="section-title">🎨 Your Design</div>
+
+      <div class="field">
+        <label>Describe your design idea <span class="required">*</span></label>
+        <textarea name="design_description" placeholder="Tell us everything — colors, themes, patterns, characters, words, anything you have in mind. The more detail, the better!" required></textarea>
+      </div>
+
+      <div class="field">
+        <label>Upload a reference image <span class="hint">(optional)</span></label>
+        <div class="upload-box" id="uploadBox">
+          <input type="file" name="reference_image" accept="image/*" id="fileInput" onchange="handleFile(this)" />
+          <div class="upload-icon">🖼️</div>
+          <div class="upload-text">Tap to upload an image</div>
+          <div class="upload-sub">JPG, PNG, WEBP — max 10MB</div>
+        </div>
+        <div class="upload-preview" id="uploadPreview">
+          ✅ <span id="fileName"></span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Pinterest board or reference link <span class="hint">(optional)</span></label>
+        <input type="url" name="reference_link" placeholder="https://pinterest.com/... or any link" />
+      </div>
+
+      <div class="field">
+        <label>Budget range <span class="hint">(optional)</span></label>
+        <select name="budget">
+          <option value="" selected>Not sure / flexible</option>
+          <option>749 – 900 SAR</option>
+          <option>900 – 1,100 SAR</option>
+          <option>1,100 – 1,400 SAR</option>
+          <option>1,400 SAR+</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Anything else we should know? <span class="hint">(optional)</span></label>
+        <textarea name="notes" placeholder="Deadline, delivery city, special requests..." style="min-height:80px;"></textarea>
+      </div>
+
+      <!-- SUBMIT -->
+      <button type="submit" class="submit-btn">🚀 Send My Order Request</button>
+      <p class="submit-note">No payment required. We'll contact you on Instagram with your quote within 24 hours.</p>
+
+    </form>
+
+    <!-- SUCCESS MESSAGE -->
+    <div class="success-screen" id="successScreen">
+      <div class="check">🎉</div>
+      <h2>Order Request Sent!</h2>
+      <p>We've received your design request and will get back to you on Instagram within <strong>24 hours</strong> with your custom quote.</p>
+      <br/>
+      <p style="color:#999; font-size:13px;">Make sure your Instagram DMs are open so we can reach you!</p>
+      <a href="https://www.instagram.com/customlabx" class="ig-link" target="_blank">📱 Visit @customlabx</a>
+    </div>
+
+  </div>
+
+  <div style="text-align:center; padding: 24px; color: #444; font-size: 12px;">
+    © 2026 Custom Lab · <a href="https://www.instagram.com/customlabx" style="color:#E8A830; text-decoration:none;">@customlabx</a>
+  </div>
+
+  <script>
+    function handleFile(input) {
+      if (input.files && input.files[0]) {
+        document.getElementById('fileName').textContent = input.files[0].name;
+        document.getElementById('uploadPreview').style.display = 'flex';
+      }
+    }
+
+    // Handle form submission & show success screen
+    const form = document.getElementById('orderForm');
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = form.querySelector('.submit-btn');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      const data = new FormData(form);
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById('successScreen').style.display = 'block';
+        } else {
+          btn.textContent = '🚀 Send My Order Request';
+          btn.disabled = false;
+          alert('Something went wrong. Please try again or DM us on Instagram.');
+        }
+      } catch {
+        btn.textContent = '🚀 Send My Order Request';
+        btn.disabled = false;
+        alert('Something went wrong. Please DM us on Instagram @customlabx');
+      }
+    });
+  </script>
+
+</body>
+</html>
