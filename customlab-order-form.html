@@ -378,7 +378,7 @@
   <!-- FORM CARD -->
   <div class="card">
 
-    <form id="orderForm" action="https://formspree.io/f/mykavejk" method="POST" enctype="multipart/form-data">
+    <form id="orderForm" action="https://formspree.io/f/mykavejk" method="POST">
 
       <!-- YOUR INFO -->
       <div class="section-title">👤 Your Info</div>
@@ -443,16 +443,17 @@
       </div>
 
       <div class="field">
-        <label>Upload a reference image <span class="hint">(optional)</span></label>
+        <label>Reference image <span class="hint">(optional)</span></label>
         <div class="upload-box" id="uploadBox">
-          <input type="file" name="reference_image" accept="image/*" id="fileInput" onchange="handleFile(this)" />
+          <input type="file" accept="image/*" id="fileInput" onchange="handleFile(this)" />
           <div class="upload-icon">🖼️</div>
-          <div class="upload-text">Tap to upload an image</div>
-          <div class="upload-sub">JPG, PNG, WEBP — max 10MB</div>
+          <div class="upload-text">Tap to select your image</div>
+          <div class="upload-sub">We'll ask you to send it via Instagram DM after you submit</div>
         </div>
         <div class="upload-preview" id="uploadPreview">
-          ✅ <span id="fileName"></span>
+          ✅ <span id="fileName"></span> — <em style="color:#888;font-style:normal;font-size:12px;">Send this image to @customlabx on Instagram after submitting</em>
         </div>
+        <input type="hidden" name="reference_image_filename" id="imageFilename" value="" />
       </div>
 
       <div class="field">
@@ -488,7 +489,7 @@
       <h2>Order Request Sent!</h2>
       <p>We've received your design request and will get back to you on Instagram within <strong>24 hours</strong> with your custom quote.</p>
       <br/>
-      <p style="color:#999; font-size:13px;">Make sure your Instagram DMs are open so we can reach you!</p>
+      <p style="color:#999; font-size:13px;">Make sure your Instagram DMs are open so we can reach you! If you selected a reference image, please send it to <strong>@customlabx</strong> on Instagram.</p>
       <a href="https://www.instagram.com/customlabx" class="ig-link" target="_blank">📱 Visit @customlabx</a>
     </div>
 
@@ -501,7 +502,9 @@
   <script>
     function handleFile(input) {
       if (input.files && input.files[0]) {
-        document.getElementById('fileName').textContent = input.files[0].name;
+        const name = input.files[0].name;
+        document.getElementById('fileName').textContent = name;
+        document.getElementById('imageFilename').value = name;
         document.getElementById('uploadPreview').style.display = 'flex';
       }
     }
