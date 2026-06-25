@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.moyasar.com/mpf/1.14.0/moyasar.css"/>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -798,7 +797,7 @@ footer a{color:var(--gold);text-decoration:none;}
         </div>
       </div>
       <div class="pay-error-inline" id="payErr">Please enter a valid amount (minimum 1 SAR).</div>
-      <button class="pay-confirm-btn" onclick="initPayment()">Proceed to Secure Payment →</button>
+      <button class="pay-confirm-btn" id="payConfirmBtn" onclick="initPayment()">Proceed to Secure Payment →</button>
     </div>
 
     <!-- STEP 2: Moyasar card form -->
@@ -807,7 +806,7 @@ footer a{color:var(--gold);text-decoration:none;}
         Paying: <em id="displayAmt"></em>
         <button class="amount-change" onclick="resetPayment()">✕ Change</button>
       </div>
-      <div id="mysr-form"></div>
+      <div id="mysr-container"><div id="mysr-form"></div></div>
     </div>
 
     <!-- SUCCESS -->
@@ -838,7 +837,6 @@ footer a{color:var(--gold);text-decoration:none;}
 </div><!-- /page -->
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" integrity="sha384-0esPaJH+F9evp2lsJYN36SW7XkRbaYviuyF+PpnbjDXBC9i1CWGiJyGrXCyiyGqZ" crossorigin="anonymous"></script>
-<script src="https://cdn.moyasar.com/mpf/1.14.0/moyasar.js" integrity="sha384-nCOdiprSaPwKQKKtxguQ3RvSRs5dd1WzV+rvVNEIHIUrF0+y9+UIlHo5VX2c1h3R" crossorigin="anonymous"></script>
 <script>
 // ── Cursor spotlight ──
 document.addEventListener('mousemove', e => {
@@ -909,6 +907,27 @@ form.addEventListener('submit', async e => {
 
 // ── Moyasar Payment ──
 const MPFK = 'pk_test_8q9DCAGvMeR1JDgZr5CqnFrXU3pUwBzh4X15Arpc';
+const MOYASAR_JS  = 'https://cdn.moyasar.com/mpf/1.14.0/moyasar.js';
+const MOYASAR_CSS = 'https://cdn.moyasar.com/mpf/1.14.0/moyasar.css';
+let moyasarLoading = false;
+
+function loadMoyasarSDK(cb) {
+  if (typeof Moyasar !== 'undefined') { cb(null); return; }
+  if (moyasarLoading) { setTimeout(() => loadMoyasarSDK(cb), 100); return; }
+  moyasarLoading = true;
+  // CSS
+  if (!document.querySelector('link[href*="moyasar.css"]')) {
+    const l = document.createElement('link');
+    l.rel = 'stylesheet'; l.href = MOYASAR_CSS;
+    document.head.appendChild(l);
+  }
+  // JS
+  const s = document.createElement('script');
+  s.src = MOYASAR_JS;
+  s.onload = () => { moyasarLoading = false; cb(null); };
+  s.onerror = () => { moyasarLoading = false; cb(new Error('Failed to load payment library. Please check your internet connection.')); };
+  document.head.appendChild(s);
+}
 
 function initPayment() {
   const amtSAR = parseFloat(document.getElementById('pay-amount').value);
@@ -916,28 +935,43 @@ function initPayment() {
   const errEl = document.getElementById('payErr');
 
   if (!amtSAR || amtSAR < 1) {
+    errEl.textContent = 'Please enter a valid amount (minimum 1 SAR).';
     errEl.style.display = 'block';
     document.getElementById('pay-amount').focus();
     return;
   }
   errEl.style.display = 'none';
 
-  const halalas = Math.round(amtSAR * 100);
-  document.getElementById('displayAmt').textContent = amtSAR.toFixed(2) + ' SAR';
-  document.getElementById('amountStep').style.display = 'none';
-  document.getElementById('moyasar-wrapper').style.display = 'block';
-  document.getElementById('mysr-form').innerHTML = '';
+  const btn = document.getElementById('payConfirmBtn');
+  btn.textContent = 'Loading payment…';
+  btn.disabled = true;
 
-  const base = window.location.origin + window.location.pathname;
-  Moyasar.init({
-    element: '#mysr-form',
-    amount: halalas,
-    currency: 'SAR',
-    description: 'Custom Lab Commission' + (ig ? ' — @' + ig.replace('@','') : ''),
-    publishable_api_key: MPFK,
-    callback_url: base + '?section=pay',
-    methods: ['creditcard'],
-    metadata: { instagram: ig, source: 'customlab-website' }
+  loadMoyasarSDK(function(err) {
+    btn.textContent = 'Proceed to Secure Payment →';
+    btn.disabled = false;
+    if (err) {
+      errEl.textContent = err.message;
+      errEl.style.display = 'block';
+      return;
+    }
+    const halalas = Math.round(amtSAR * 100);
+    document.getElementById('displayAmt').textContent = amtSAR.toFixed(2) + ' SAR';
+    document.getElementById('amountStep').style.display = 'none';
+    document.getElementById('moyasar-wrapper').style.display = 'block';
+    // Ensure fresh container (Moyasar replaces the element on init)
+    document.getElementById('mysr-container').innerHTML = '<div id="mysr-form"></div>';
+
+    const base = window.location.origin + window.location.pathname;
+    Moyasar.init({
+      element: '#mysr-form',
+      amount: halalas,
+      currency: 'SAR',
+      description: 'Custom Lab Commission' + (ig ? ' — @' + ig.replace('@','') : ''),
+      publishable_api_key: MPFK,
+      callback_url: base + '?section=pay',
+      methods: ['creditcard'],
+      metadata: { instagram: ig, source: 'customlab-website' }
+    });
   });
 }
 
@@ -946,8 +980,9 @@ function resetPayment() {
   document.getElementById('moyasar-wrapper').style.display = 'none';
   document.getElementById('paySuccess').style.display = 'none';
   document.getElementById('payFailed').style.display = 'none';
-  document.getElementById('mysr-form').innerHTML = '';
   document.getElementById('payErr').style.display = 'none';
+  // Moyasar replaces #mysr-form element; recreate it so next init works
+  document.getElementById('mysr-container').innerHTML = '<div id="mysr-form"></div>';
   window.history.replaceState({}, '', window.location.pathname);
 }
 
