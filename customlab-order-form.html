@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.moyasar.com/mpf/1.14.0/moyasar.css"/>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -436,6 +437,78 @@ footer a{color:var(--gold);text-decoration:none;}
   .hero{padding:110px 20px 70px;}
   .hero-headline{letter-spacing:-2px;}
 }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PAYMENT SECTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.pay-section{max-width:780px;margin:0 auto;padding:0 24px 100px;position:relative;z-index:1;}
+.pay-divider{display:flex;align-items:center;gap:16px;margin-bottom:52px;
+  color:rgba(255,255,255,.18);font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;}
+.pay-divider::before,.pay-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07);}
+.pay-card{background:#fff;border-radius:24px;padding:44px 40px 52px;color:#1a1a1a;
+  box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(232,168,48,.15);
+  position:relative;overflow:hidden;}
+.pay-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--gold),#f5c842,var(--gold));
+  background-size:200% 100%;animation:gradientSlide 3s ease infinite;}
+.pay-header{text-align:center;margin-bottom:36px;}
+.pay-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.pay-title{font-size:26px;font-weight:800;letter-spacing:-.5px;color:#1a1a1a;margin-bottom:8px;}
+.pay-subtitle{font-size:13.5px;color:#aaa;line-height:1.65;max-width:420px;margin:0 auto;}
+.amount-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.amount-wrap{position:relative;}
+.amount-prefix{position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  font-weight:700;font-size:14px;color:#aaa;pointer-events:none;z-index:1;
+  transition:color .2s;}
+.amount-wrap:focus-within .amount-prefix{color:var(--gold);}
+#pay-amount{padding-left:56px !important;}
+.amount-wrap label{left:56px;}
+.pay-confirm-btn{width:100%;padding:17px 24px;background:#111;color:#fff;border:none;
+  border-radius:12px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;
+  position:relative;overflow:hidden;transition:background .2s,transform .18s;
+  box-shadow:0 4px 20px rgba(0,0,0,.2);}
+.pay-confirm-btn:hover{background:#222;transform:translateY(-2px);}
+.pay-confirm-btn:active{transform:none;}
+#moyasar-wrapper{display:none;}
+.amount-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;
+  border-radius:100px;background:rgba(232,168,48,.1);border:1px solid rgba(232,168,48,.3);
+  font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:24px;}
+.amount-badge em{color:var(--gold);font-style:normal;}
+.amount-change{background:none;border:none;font-size:11px;color:#aaa;cursor:pointer;
+  text-decoration:underline;font-family:inherit;margin-left:4px;}
+.amount-change:hover{color:#555;}
+/* Moyasar overrides */
+.mysr-form .mysr-form-title{display:none !important;}
+.mysr-form .mysr-btn,.mysr-form button[type="submit"]{
+  background:var(--gold) !important;color:#000 !important;
+  font-family:'Plus Jakarta Sans',sans-serif !important;font-weight:800 !important;
+  border-radius:12px !important;border:none !important;}
+.mysr-form input{border-radius:10px !important;font-family:'Plus Jakarta Sans',sans-serif !important;}
+/* Payment results */
+.pay-result{display:none;text-align:center;padding:40px 20px;animation:fadeUp .6s ease both;}
+.result-ring{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:36px;margin:0 auto 20px;
+  animation:popSpring .6s .1s cubic-bezier(.34,1.56,.64,1) both;}
+.result-ring.success{background:linear-gradient(135deg,var(--gold),#f5c842);
+  box-shadow:0 8px 32px rgba(232,168,48,.4);}
+.result-ring.failed{background:linear-gradient(135deg,#e53935,#ff6b6b);
+  box-shadow:0 8px 32px rgba(229,57,53,.35);}
+.pay-result h3{font-size:22px;font-weight:800;margin-bottom:8px;color:#1a1a1a;}
+.pay-result p{font-size:14px;color:#666;line-height:1.65;}
+.pay-txid{display:inline-block;margin-top:12px;padding:6px 14px;background:#f5f5f5;
+  border-radius:8px;font-size:12px;font-family:monospace;color:#555;}
+.pay-retry{margin-top:20px;padding:12px 24px;background:#f0f0f0;border:none;
+  border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;
+  cursor:pointer;color:#333;transition:background .2s;}
+.pay-retry:hover{background:#e0e0e0;}
+.pay-error-inline{
+  display:none;background:#fff3f3;border:1px solid #ffd0d0;border-radius:10px;
+  padding:12px 16px;font-size:13px;color:#c62828;margin-top:12px;text-align:center;}
+@media(max-width:520px){
+  .amount-grid{grid-template-columns:1fr;}
+  .pay-card{padding:28px 20px 40px;border-radius:18px;}
+}
 </style>
 </head>
 <body>
@@ -456,9 +529,12 @@ footer a{color:var(--gold);text-decoration:none;}
   <div class="nav-logo">
     <img src="logo.png" alt="Custom Lab"/>
   </div>
-  <div class="nav-badge">
-    <span></span>
-    Open for orders
+  <div style="display:flex;align-items:center;gap:12px;">
+    <a href="#pay" style="font-size:13px;font-weight:700;color:var(--gold);text-decoration:none;padding:8px 18px;border:1.5px solid rgba(232,168,48,.4);border-radius:100px;transition:background .2s,border-color .2s;" onmouseover="this.style.background='rgba(232,168,48,.08)'" onmouseout="this.style.background=''">Pay Now</a>
+    <div class="nav-badge">
+      <span></span>
+      Open for orders
+    </div>
   </div>
 </nav>
 
@@ -693,6 +769,66 @@ footer a{color:var(--gold);text-decoration:none;}
   </div>
 </section>
 
+<!-- PAYMENT SECTION -->
+<section class="pay-section" id="pay">
+  <div class="pay-divider">Already have a quote? Pay here</div>
+
+  <div class="pay-card reveal" id="payCard">
+
+    <!-- STEP 1: enter amount -->
+    <div id="amountStep">
+      <div class="pay-header">
+        <div class="pay-eyebrow">💳 Secure Payment</div>
+        <h2 class="pay-title">Pay for Your Commission</h2>
+        <p class="pay-subtitle">Enter the amount quoted to you on Instagram and your card details to complete your order.</p>
+      </div>
+      <div class="amount-grid">
+        <div class="field">
+          <div class="fi amount-wrap">
+            <span class="amount-prefix">SAR</span>
+            <input type="number" id="pay-amount" min="1" step="0.01" placeholder=" "/>
+            <label for="pay-amount">Quoted Amount <span class="req">*</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <div class="fi">
+            <input type="text" id="pay-instagram" placeholder=" "/>
+            <label for="pay-instagram">Your Instagram Handle</label>
+          </div>
+        </div>
+      </div>
+      <div class="pay-error-inline" id="payErr">Please enter a valid amount (minimum 1 SAR).</div>
+      <button class="pay-confirm-btn" onclick="initPayment()">Proceed to Secure Payment →</button>
+    </div>
+
+    <!-- STEP 2: Moyasar card form -->
+    <div id="moyasar-wrapper">
+      <div class="amount-badge">
+        Paying: <em id="displayAmt"></em>
+        <button class="amount-change" onclick="resetPayment()">✕ Change</button>
+      </div>
+      <div id="mysr-form"></div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="pay-result" id="paySuccess">
+      <div class="result-ring success">✓</div>
+      <h3>Payment Successful!</h3>
+      <p>Your commission is confirmed. We'll start on your pair and keep you updated on Instagram.</p>
+      <div class="pay-txid" id="payTxId"></div>
+    </div>
+
+    <!-- FAILED -->
+    <div class="pay-result" id="payFailed">
+      <div class="result-ring failed">✕</div>
+      <h3>Payment Failed</h3>
+      <p id="payFailMsg">Something went wrong. Please try again or DM us on Instagram.</p>
+      <button class="pay-retry" onclick="resetPayment()">Try Again</button>
+    </div>
+
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <span>© 2026 Custom Lab. All rights reserved.</span>
@@ -702,6 +838,7 @@ footer a{color:var(--gold);text-decoration:none;}
 </div><!-- /page -->
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" integrity="sha384-0esPaJH+F9evp2lsJYN36SW7XkRbaYviuyF+PpnbjDXBC9i1CWGiJyGrXCyiyGqZ" crossorigin="anonymous"></script>
+<script src="https://cdn.moyasar.com/mpf/1.14.0/moyasar.js" integrity="sha384-nCOdiprSaPwKQKKtxguQ3RvSRs5dd1WzV+rvVNEIHIUrF0+y9+UIlHo5VX2c1h3R" crossorigin="anonymous"></script>
 <script>
 // ── Cursor spotlight ──
 document.addEventListener('mousemove', e => {
@@ -769,6 +906,79 @@ form.addEventListener('submit', async e => {
     alert('Something went wrong. Please DM us on Instagram @customlabx');
   }
 });
+
+// ── Moyasar Payment ──
+const MPFK = 'pk_test_8q9DCAGvMeR1JDgZr5CqnFrXU3pUwBzh4X15Arpc';
+
+function initPayment() {
+  const amtSAR = parseFloat(document.getElementById('pay-amount').value);
+  const ig = (document.getElementById('pay-instagram').value || '').trim();
+  const errEl = document.getElementById('payErr');
+
+  if (!amtSAR || amtSAR < 1) {
+    errEl.style.display = 'block';
+    document.getElementById('pay-amount').focus();
+    return;
+  }
+  errEl.style.display = 'none';
+
+  const halalas = Math.round(amtSAR * 100);
+  document.getElementById('displayAmt').textContent = amtSAR.toFixed(2) + ' SAR';
+  document.getElementById('amountStep').style.display = 'none';
+  document.getElementById('moyasar-wrapper').style.display = 'block';
+  document.getElementById('mysr-form').innerHTML = '';
+
+  const base = window.location.origin + window.location.pathname;
+  Moyasar.init({
+    element: '#mysr-form',
+    amount: halalas,
+    currency: 'SAR',
+    description: 'Custom Lab Commission' + (ig ? ' — @' + ig.replace('@','') : ''),
+    publishable_api_key: MPFK,
+    callback_url: base + '?section=pay',
+    methods: ['creditcard'],
+    metadata: { instagram: ig, source: 'customlab-website' }
+  });
+}
+
+function resetPayment() {
+  document.getElementById('amountStep').style.display = 'block';
+  document.getElementById('moyasar-wrapper').style.display = 'none';
+  document.getElementById('paySuccess').style.display = 'none';
+  document.getElementById('payFailed').style.display = 'none';
+  document.getElementById('mysr-form').innerHTML = '';
+  document.getElementById('payErr').style.display = 'none';
+  window.history.replaceState({}, '', window.location.pathname);
+}
+
+// Handle redirect back from Moyasar after payment
+(function checkPayResult() {
+  const p = new URLSearchParams(window.location.search);
+  const status = p.get('status');
+  if (!status) return;
+
+  // Scroll to payment card after redirect
+  setTimeout(() => {
+    const el = document.getElementById('payCard');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 350);
+
+  document.getElementById('amountStep').style.display = 'none';
+  document.getElementById('moyasar-wrapper').style.display = 'none';
+
+  if (status === 'paid') {
+    const el = document.getElementById('paySuccess');
+    el.style.display = 'block';
+    const txid = p.get('id');
+    if (txid) document.getElementById('payTxId').textContent = 'Payment ID: ' + txid;
+    burst();
+  } else {
+    document.getElementById('payFailed').style.display = 'block';
+    const msg = p.get('message');
+    if (msg) document.getElementById('payFailMsg').textContent = decodeURIComponent(msg);
+  }
+  window.history.replaceState({}, '', window.location.pathname + '#pay');
+})();
 
 function burst() {
   const c = '#E8A830', w = '#fff';
