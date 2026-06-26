@@ -958,17 +958,19 @@ function initPayment() {
     document.getElementById('displayAmt').textContent = amtSAR.toFixed(2) + ' SAR';
     document.getElementById('amountStep').style.display = 'none';
     document.getElementById('moyasar-wrapper').style.display = 'block';
-    // Ensure fresh container (Moyasar replaces the element on init)
+    // Recreate element — Moyasar replaces it on init, old reference is stale
     document.getElementById('mysr-container').innerHTML = '<div id="mysr-form"></div>';
+    const formEl = document.getElementById('mysr-form');
 
-    const base = window.location.origin + window.location.pathname;
+    const liveBase = 'https://hikmatka.github.io/customlab-website/customlab-order-form.html';
+    const callbackBase = window.location.protocol === 'file:' ? liveBase : (window.location.origin + window.location.pathname);
     Moyasar.init({
-      element: '#mysr-form',
+      element: formEl,
       amount: halalas,
       currency: 'SAR',
       description: 'Custom Lab Commission' + (ig ? ' — @' + ig.replace('@','') : ''),
       publishable_api_key: MPFK,
-      callback_url: base + '?section=pay',
+      callback_url: callbackBase + '?section=pay',
       methods: ['creditcard'],
       metadata: { instagram: ig, source: 'customlab-website' }
     });
