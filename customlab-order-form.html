@@ -917,6 +917,18 @@ document.querySelectorAll('select').forEach(s => {
   s.addEventListener('change', () => s.classList.toggle('has-v', !!s.value));
 });
 
+// ── Supabase ──
+const SB_URL = 'https://chtlvevmvoqkskvrlona.supabase.co';
+const SB_KEY = 'sb_publishable_f_qfC2TNaSZEFFkDzImYMw_vsKG4Jon';
+async function sbInsert(table, data) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    body: JSON.stringify(data)
+  });
+  if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.message||'Supabase error '+r.status); }
+}
+
 // ── Form submit ──
 const form = document.getElementById('orderForm');
 const btn  = document.getElementById('submitBtn');
@@ -934,17 +946,30 @@ form.addEventListener('submit', async e => {
   spin.style.display = 'block';
   txt.textContent = 'Sending…';
   try {
-    const r = await fetch(form.action, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}});
-    if (r.ok) {
-      form.style.display = 'none';
-      document.getElementById('successScreen').style.display = 'block';
-      burst();
-    } else throw 0;
+    const fd = new FormData(form);
+    await sbInsert('orders', {
+      name:               (fd.get('name')               || '').trim(),
+      email:              (fd.get('email')              || '').trim(),
+      instagram:          (fd.get('instagram')          || '').trim(),
+      phone:              (fd.get('phone')              || '').trim(),
+      shoe_size:          (fd.get('shoe_size')          || '').trim(),
+      gender_fit:         (fd.get('gender_fit')         || '').trim(),
+      design_description: (fd.get('design_description') || '').trim(),
+      reference_link:     (fd.get('reference_link')     || '').trim(),
+      budget:             (fd.get('budget')             || '').trim(),
+      notes:              (fd.get('notes')              || '').trim(),
+      terms_accepted:     true
+    });
+    // Email notification via Formspree (fire & forget)
+    fetch(form.action, {method:'POST', body:fd, headers:{'Accept':'application/json'}}).catch(()=>{});
+    form.style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+    burst();
   } catch {
     btn.disabled = false;
     spin.style.display = 'none';
     txt.textContent = '🚀 Send My Commission Request';
-    alert('Something went wrong. Please DM us on Instagram @customlabx');
+    alert('Something went wrong saving your request. Please DM us on Instagram @customlabx');
   }
 });
 

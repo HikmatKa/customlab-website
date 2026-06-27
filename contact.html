@@ -293,9 +293,23 @@ const ro = new IntersectionObserver(entries => {
 },{threshold:.08});
 document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
 
+// ── Supabase ──
+const SB_URL = 'https://chtlvevmvoqkskvrlona.supabase.co';
+const SB_KEY = 'sb_publishable_f_qfC2TNaSZEFFkDzImYMw_vsKG4Jon';
+async function sbInsert(table, data) {
+  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    body: JSON.stringify(data)
+  });
+  if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.message||'Supabase error '+r.status); }
+}
+
 const form = document.getElementById('contactForm');
 const btn  = document.getElementById('submitBtn');
 const errEl = document.getElementById('formError');
+
+const BTN_HTML = 'Send Message <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
@@ -313,24 +327,20 @@ form.addEventListener('submit', async e => {
   btn.textContent = 'Sending…';
 
   try {
-    const res = await fetch(form.action, {
-      method: 'POST',
-      headers: {'Accept':'application/json'},
-      body: new FormData(form)
+    await sbInsert('contacts', {
+      name,
+      email,
+      phone:   (form.phone.value || '').trim(),
+      message: msg
     });
-    if (res.ok) {
-      form.style.display = 'none';
-      document.getElementById('formSuccess').style.display = 'block';
-    } else {
-      const data = await res.json().catch(() => ({}));
-      showErr(data.error || 'Something went wrong. Please try again.');
-      btn.disabled = false;
-      btn.innerHTML = 'Send Message <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    }
+    // Email notification via Formspree (fire & forget)
+    fetch(form.action, {method:'POST', headers:{'Accept':'application/json'}, body:new FormData(form)}).catch(()=>{});
+    form.style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
   } catch {
-    showErr('Network error. Please check your connection and try again.');
+    showErr('Something went wrong. Please try again or DM us @customlabx.');
     btn.disabled = false;
-    btn.innerHTML = 'Send Message <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    btn.innerHTML = BTN_HTML;
   }
 });
 
