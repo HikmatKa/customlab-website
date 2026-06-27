@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Contact — CustomLabX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#E8A830;--gold-dark:#c98e1a;--gold-15:rgba(232,168,48,.15);
+  --dark:#0d0d0d;--dark2:#141414;--white:#fff;--r:14px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--dark);color:var(--white);overflow-x:hidden;min-height:100svh;}
+
+#spotlight{pointer-events:none;position:fixed;inset:0;z-index:0;background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(232,168,48,.07),transparent 70%);transition:background .1s;}
+.dot-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.07) 1px,transparent 1px);background-size:28px 28px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,#000 40%,transparent 100%);}
+.shapes{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.shape{position:absolute;border-radius:9999px;border:2px solid rgba(232,168,48,.18);backdrop-filter:blur(2px);}
+.shape::after{content:'';position:absolute;inset:0;border-radius:9999px;background:radial-gradient(circle at 50% 50%,rgba(232,168,48,.12),transparent 70%);}
+.s1{width:560px;height:130px;top:12%;left:-8%;transform:rotate(12deg);animation:shapeIn1 2.2s .3s cubic-bezier(.23,.86,.39,.96) both,floatA 14s 2.5s ease-in-out infinite;}
+.s2{width:420px;height:100px;bottom:22%;right:-4%;transform:rotate(-14deg);animation:shapeIn2 2.2s .5s cubic-bezier(.23,.86,.39,.96) both,floatB 18s 2.7s ease-in-out infinite;}
+.s3{width:260px;height:70px;bottom:8%;left:8%;transform:rotate(-7deg);animation:shapeIn1 2.2s .4s cubic-bezier(.23,.86,.39,.96) both,floatC 22s 2.9s ease-in-out infinite;border-color:rgba(232,168,48,.09);}
+.s4{width:180px;height:50px;top:8%;right:18%;transform:rotate(20deg);animation:shapeIn2 2.2s .6s cubic-bezier(.23,.86,.39,.96) both,floatA 12s 3.1s ease-in-out infinite;border-color:rgba(232,168,48,.12);}
+.s5{width:130px;height:36px;top:4%;left:24%;transform:rotate(-24deg);animation:shapeIn1 2.2s .7s cubic-bezier(.23,.86,.39,.96) both,floatB 16s 3.3s ease-in-out infinite;border-color:rgba(232,168,48,.08);}
+@keyframes shapeIn1{from{opacity:0;transform:rotate(var(--r,12deg)) translateY(-120px);}to{opacity:1;}}
+@keyframes shapeIn2{from{opacity:0;transform:rotate(var(--r,-14deg)) translateY(-120px);}to{opacity:1;}}
+@keyframes floatA{0%,100%{transform:rotate(12deg) translateY(0);}50%{transform:rotate(12deg) translateY(16px);}}
+@keyframes floatB{0%,100%{transform:rotate(-14deg) translateY(0);}50%{transform:rotate(-14deg) translateY(-14px);}}
+@keyframes floatC{0%,100%{transform:rotate(-7deg) translateY(0);}50%{transform:rotate(-7deg) translateY(10px);}}
+
+.page{position:relative;z-index:1;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 40px;transition:background .3s,backdrop-filter .3s,border-color .3s;border-bottom:1px solid transparent;}
+nav.scrolled{background:rgba(13,13,13,.92);backdrop-filter:blur(20px);border-color:rgba(232,168,48,.15);}
+.nav-left{grid-column:1;display:flex;align-items:center;gap:6px;}
+.nav-logo{grid-column:2;display:flex;align-items:center;justify-content:center;}
+.nav-logo img{height:72px;width:auto;object-fit:contain;filter:drop-shadow(0 0 18px rgba(232,168,48,.45)) brightness(1.15);transition:transform .3s,filter .3s;}
+.nav-logo img:hover{transform:scale(1.06);filter:drop-shadow(0 0 28px rgba(232,168,48,.7)) brightness(1.2);}
+.nav-right{grid-column:3;display:flex;align-items:center;justify-content:flex-end;gap:12px;}
+.nav-link{font-size:13px;font-weight:700;color:rgba(255,255,255,.6);text-decoration:none;padding:8px 18px;border-radius:100px;transition:color .2s,background .2s;}
+.nav-link:hover{color:var(--gold);background:rgba(232,168,48,.08);}
+.nav-link.active{color:var(--gold);}
+.nav-badge{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:100px;border:1px solid rgba(232,168,48,.3);background:rgba(232,168,48,.07);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);}
+.nav-badge span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+
+/* HERO */
+.contact-hero{min-height:46svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 24px 40px;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);border-radius:100px;padding:6px 18px 6px 10px;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:28px;animation:fadeUp .7s .2s both;}
+.hero-eyebrow-dot{width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:9px;color:#000;font-weight:800;}
+.contact-headline{font-size:clamp(48px,9vw,96px);font-weight:800;line-height:.95;letter-spacing:-3px;animation:fadeUp .7s .3s both;}
+.contact-headline .hl-gold{color:var(--gold);}
+.contact-sub{font-size:clamp(14px,2vw,17px);color:rgba(255,255,255,.4);max-width:440px;line-height:1.7;margin:22px auto 0;animation:fadeUp .7s .45s both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+/* DIVIDER */
+.divider{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(232,168,48,.25),transparent);}
+
+/* FORM SECTION */
+.contact-wrap{max-width:680px;margin:0 auto;padding:64px 24px 120px;}
+
+.contact-card{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:24px;
+  padding:48px 44px;
+  position:relative;
+  overflow:hidden;
+}
+.contact-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.6;
+}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.form-group.full{grid-column:1/-1;}
+
+.form-group label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;
+  padding:14px 18px;
+  color:var(--white);
+  font-family:inherit;
+  font-size:14px;
+  font-weight:500;
+  outline:none;
+  transition:border-color .2s,background .2s,box-shadow .2s;
+  width:100%;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder{color:rgba(255,255,255,.25);}
+.form-group input:focus,
+.form-group textarea:focus{
+  border-color:rgba(232,168,48,.5);
+  background:rgba(232,168,48,.05);
+  box-shadow:0 0 0 3px rgba(232,168,48,.08);
+}
+.form-group textarea{resize:vertical;min-height:140px;line-height:1.6;}
+
+/* phone flag prefix */
+.phone-wrap{position:relative;display:flex;align-items:center;}
+.phone-prefix{
+  position:absolute;left:14px;
+  font-size:14px;font-weight:700;color:rgba(255,255,255,.4);
+  pointer-events:none;letter-spacing:.5px;
+  display:flex;align-items:center;gap:6px;
+}
+.phone-wrap input{padding-left:72px;}
+
+.submit-btn{
+  width:100%;padding:16px 32px;
+  background:var(--gold);color:#000;
+  border:none;border-radius:100px;
+  font-family:inherit;font-size:15px;font-weight:800;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:background .2s,transform .2s,box-shadow .2s;
+  margin-top:8px;
+}
+.submit-btn:hover{background:var(--gold-dark);transform:translateY(-2px);box-shadow:0 12px 32px rgba(232,168,48,.25);}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.submit-btn svg{transition:transform .2s;}
+.submit-btn:hover svg{transform:translateX(4px);}
+
+/* STATE MESSAGES */
+.form-state{display:none;text-align:center;padding:32px 24px;border-radius:16px;}
+.form-success{background:rgba(46,200,100,.08);border:1px solid rgba(46,200,100,.2);}
+.form-success .state-icon{font-size:40px;margin-bottom:12px;}
+.form-success h3{font-size:20px;font-weight:800;color:#2ec864;margin-bottom:8px;}
+.form-success p{font-size:14px;color:rgba(255,255,255,.4);line-height:1.6;}
+.form-error-msg{background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.2);border-radius:12px;padding:12px 16px;font-size:13px;color:#ff6060;margin-bottom:16px;display:none;}
+
+/* CONTACT INFO STRIP */
+.info-strip{display:flex;gap:16px;margin-bottom:32px;flex-wrap:wrap;}
+.info-chip{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 18px;border-radius:100px;
+  border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);
+  font-size:12px;font-weight:600;color:rgba(255,255,255,.55);
+  text-decoration:none;transition:border-color .2s,color .2s;
+}
+.info-chip:hover{border-color:rgba(232,168,48,.4);color:var(--gold);}
+.info-chip-icon{width:28px;height:28px;border-radius:50%;background:rgba(232,168,48,.12);display:flex;align-items:center;justify-content:center;font-size:13px;}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,.06);padding:28px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:relative;z-index:1;}
+footer .copy{font-size:12px;color:rgba(255,255,255,.25);}
+footer a{color:var(--gold);text-decoration:none;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+@media(max-width:640px){
+  nav{padding:14px 20px;}
+  .form-row{grid-template-columns:1fr;}
+  .contact-card{padding:28px 20px;}
+  footer{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div id="spotlight"></div>
+<div class="dot-grid"></div>
+<div class="shapes">
+  <div class="shape s1"></div><div class="shape s2"></div>
+  <div class="shape s3"></div><div class="shape s4"></div><div class="shape s5"></div>
+</div>
+
+<div class="page">
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-left">
+    <a href="customlab-order-form.html" class="nav-link">← Order</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="gallery.html" class="nav-link">Our Work</a>
+  </div>
+  <div class="nav-logo">
+    <img src="logo.png" alt="CustomLabX"/>
+  </div>
+  <div class="nav-right">
+    <div class="nav-badge"><span></span>Open for orders</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="contact-hero">
+  <div class="hero-eyebrow">
+    <div class="hero-eyebrow-dot">✦</div>
+    We reply within 24 hours
+  </div>
+  <h1 class="contact-headline">Get in <span class="hl-gold">Touch</span></h1>
+  <p class="contact-sub">Have a vision? A question? Just want to talk kicks? We're here.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- FORM -->
+<div class="contact-wrap">
+  <div class="reveal">
+    <div class="info-strip">
+      <a href="https://www.instagram.com/customlabx" target="_blank" class="info-chip">
+        <span class="info-chip-icon">📸</span>@customlabx
+      </a>
+      <a href="mailto:hikmattgp@gmail.com" class="info-chip">
+        <span class="info-chip-icon">✉️</span>hikmattgp@gmail.com
+      </a>
+    </div>
+
+    <div class="contact-card">
+
+      <div id="formError" class="form-error-msg"></div>
+
+      <form id="contactForm" action="https://formspree.io/f/mykavejk" method="POST" novalidate>
+        <input type="hidden" name="_subject" value="New Contact Message — CustomLabX"/>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">Full Name</label>
+            <input type="text" id="fname" name="name" placeholder="Your name" required autocomplete="name"/>
+          </div>
+          <div class="form-group">
+            <label for="femail">Email Address</label>
+            <input type="email" id="femail" name="email" placeholder="your@email.com" required autocomplete="email"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fphone">Phone Number</label>
+          <div class="phone-wrap">
+            <span class="phone-prefix">🇸🇦 +966</span>
+            <input type="tel" id="fphone" name="phone" placeholder="5X XXX XXXX" autocomplete="tel"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fmsg">What are you reaching out about?</label>
+          <textarea id="fmsg" name="message" placeholder="Tell us about your idea, question, or anything on your mind..." required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          Send Message
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </form>
+
+      <div class="form-state form-success" id="formSuccess">
+        <div class="state-icon">✓</div>
+        <h3>Message sent!</h3>
+        <p>We'll get back to you within 24 hours.<br/>Check your inbox for a confirmation.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="copy">© 2026 Custom Lab. All rights reserved.</span>
+  <span class="copy">Hand painted in Saudi Arabia · <a href="https://www.instagram.com/customlabx" target="_blank">@customlabx</a></span>
+</footer>
+
+</div>
+
+<script>
+document.addEventListener('mousemove', e => {
+  document.getElementById('spotlight').style.setProperty('--mx', e.clientX + 'px');
+  document.getElementById('spotlight').style.setProperty('--my', e.clientY + 'px');
+});
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+},{passive:true});
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
+},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+const form = document.getElementById('contactForm');
+const btn  = document.getElementById('submitBtn');
+const errEl = document.getElementById('formError');
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  errEl.style.display = 'none';
+
+  const name  = form.name.value.trim();
+  const email = form.email.value.trim();
+  const msg   = form.message.value.trim();
+
+  if (!name)  { showErr('Please enter your full name.'); form.name.focus(); return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('Please enter a valid email address.'); form.email.focus(); return; }
+  if (!msg)   { showErr('Please tell us why you\'re reaching out.'); form.message.focus(); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  try {
+    const res = await fetch(form.action, {
+      method: 'POST',
+      headers: {'Accept':'application/json'},
+      body: new FormData(form)
+    });
+    if (res.ok) {
+      form.style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    } else {
+      const data = await res.json().catch(() => ({}));
+      showErr(data.error || 'Something went wrong. Please try again.');
+      btn.disabled = false;
+      btn.innerHTML = 'Send Message <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+  } catch {
+    showErr('Network error. Please check your connection and try again.');
+    btn.disabled = false;
+    btn.innerHTML = 'Send Message <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+});
+
+function showErr(msg) {
+  errEl.textContent = msg;
+  errEl.style.display = 'block';
+  errEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+</script>
+</body>
+</html>
