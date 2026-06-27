@@ -61,7 +61,7 @@ nav.scrolled{background:rgba(13,13,13,.92);backdrop-filter:blur(20px);border-col
 
 /* CARDS */
 .reviews-wrap{max-width:1100px;margin:0 auto;padding:64px 24px 80px;}
-.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.reviews-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:760px;margin:0 auto;}
 
 .review-card{
   background:var(--dark2);
@@ -155,7 +155,8 @@ footer .copy{font-size:12px;color:rgba(255,255,255,.25);}
 footer a{color:var(--gold);text-decoration:none;}
 
 @media(max-width:860px){
-  .reviews-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto;}
+  .reviews-grid{grid-template-columns:1fr 1fr;max-width:860px;margin:0 auto;}
+  .reviews-grid .review-card{max-width:unset;}
 }
 @media(max-width:640px){
   nav{padding:14px 16px;}
@@ -222,7 +223,6 @@ footer a{color:var(--gold);text-decoration:none;}
           <div class="author-avatar">T</div>
           <div class="author-info">
             <span class="author-name">Taleen</span>
-            <span class="author-handle">@taleen</span>
           </div>
         </div>
       </div>
@@ -240,25 +240,6 @@ footer a{color:var(--gold);text-decoration:none;}
           <div class="author-avatar">N</div>
           <div class="author-info">
             <span class="author-name">Naya</span>
-            <span class="author-handle">@naya</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CARD 3 — Hekmat -->
-    <div class="review-card reveal reveal-d3">
-      <div class="card-photo">
-        <img src="testimonials/myshoes.jpg" alt="Hekmat's custom Air Force 1s"/>
-      </div>
-      <div class="card-body">
-        <div class="card-stars">★★★★★</div>
-        <p class="card-quote">Fast communication from start to finish, and the result was exactly what I asked for. The quality of the paint and the finish is next level. Will definitely order again.</p>
-        <div class="card-author">
-          <div class="author-avatar">H</div>
-          <div class="author-info">
-            <span class="author-name">Hekmat</span>
-            <span class="author-handle">@hekmat</span>
           </div>
         </div>
       </div>
