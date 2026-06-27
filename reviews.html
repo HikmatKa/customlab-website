@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reviews — CustomLabX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#E8A830;--gold-dark:#c98e1a;
+  --dark:#0d0d0d;--dark2:#141414;--white:#fff;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--dark);color:var(--white);overflow-x:hidden;}
+
+#spotlight{pointer-events:none;position:fixed;inset:0;z-index:0;background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(232,168,48,.07),transparent 70%);transition:background .1s;}
+.dot-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.07) 1px,transparent 1px);background-size:28px 28px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,#000 40%,transparent 100%);}
+.shapes{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.shape{position:absolute;border-radius:9999px;border:2px solid rgba(232,168,48,.18);backdrop-filter:blur(2px);}
+.shape::after{content:'';position:absolute;inset:0;border-radius:9999px;background:radial-gradient(circle at 50% 50%,rgba(232,168,48,.12),transparent 70%);}
+.s1{width:560px;height:130px;top:12%;left:-8%;transform:rotate(12deg);animation:shapeIn1 2.2s .3s cubic-bezier(.23,.86,.39,.96) both,floatA 14s 2.5s ease-in-out infinite;}
+.s2{width:420px;height:100px;bottom:22%;right:-4%;transform:rotate(-14deg);animation:shapeIn2 2.2s .5s cubic-bezier(.23,.86,.39,.96) both,floatB 18s 2.7s ease-in-out infinite;}
+.s3{width:260px;height:70px;bottom:8%;left:8%;transform:rotate(-7deg);animation:shapeIn1 2.2s .4s cubic-bezier(.23,.86,.39,.96) both,floatC 22s 2.9s ease-in-out infinite;border-color:rgba(232,168,48,.09);}
+.s4{width:180px;height:50px;top:8%;right:18%;transform:rotate(20deg);animation:shapeIn2 2.2s .6s cubic-bezier(.23,.86,.39,.96) both,floatA 12s 3.1s ease-in-out infinite;border-color:rgba(232,168,48,.12);}
+.s5{width:130px;height:36px;top:4%;left:24%;transform:rotate(-24deg);animation:shapeIn1 2.2s .7s cubic-bezier(.23,.86,.39,.96) both,floatB 16s 3.3s ease-in-out infinite;border-color:rgba(232,168,48,.08);}
+@keyframes shapeIn1{from{opacity:0;transform:rotate(var(--r,12deg)) translateY(-120px);}to{opacity:1;}}
+@keyframes shapeIn2{from{opacity:0;transform:rotate(var(--r,-14deg)) translateY(-120px);}to{opacity:1;}}
+@keyframes floatA{0%,100%{transform:rotate(12deg) translateY(0);}50%{transform:rotate(12deg) translateY(16px);}}
+@keyframes floatB{0%,100%{transform:rotate(-14deg) translateY(0);}50%{transform:rotate(-14deg) translateY(-14px);}}
+@keyframes floatC{0%,100%{transform:rotate(-7deg) translateY(0);}50%{transform:rotate(-7deg) translateY(10px);}}
+
+.page{position:relative;z-index:1;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 40px;transition:background .3s,backdrop-filter .3s,border-color .3s;border-bottom:1px solid transparent;}
+nav.scrolled{background:rgba(13,13,13,.92);backdrop-filter:blur(20px);border-color:rgba(232,168,48,.15);}
+.nav-left{grid-column:1;display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+.nav-logo{grid-column:2;display:flex;align-items:center;justify-content:center;}
+.nav-logo img{height:72px;width:auto;object-fit:contain;filter:drop-shadow(0 0 18px rgba(232,168,48,.45)) brightness(1.15);transition:transform .3s,filter .3s;}
+.nav-logo img:hover{transform:scale(1.06);filter:drop-shadow(0 0 28px rgba(232,168,48,.7)) brightness(1.2);}
+.nav-right{grid-column:3;display:flex;align-items:center;justify-content:flex-end;}
+.nav-link{font-size:12px;font-weight:700;color:rgba(255,255,255,.6);text-decoration:none;padding:7px 14px;border-radius:100px;transition:color .2s,background .2s;white-space:nowrap;}
+.nav-link:hover,.nav-link.active{color:var(--gold);background:rgba(232,168,48,.08);}
+.nav-badge{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:100px;border:1px solid rgba(232,168,48,.3);background:rgba(232,168,48,.07);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);}
+.nav-badge span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+
+/* HERO */
+.reviews-hero{padding:140px 24px 48px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);border-radius:100px;padding:6px 18px 6px 10px;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:28px;animation:fadeUp .7s .2s both;}
+.hero-eyebrow-dot{width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:9px;color:#000;font-weight:800;}
+.reviews-headline{font-size:clamp(44px,8vw,90px);font-weight:800;line-height:.95;letter-spacing:-3px;animation:fadeUp .7s .3s both;}
+.reviews-headline .hl-gold{color:var(--gold);}
+.reviews-sub{font-size:clamp(14px,2vw,17px);color:rgba(255,255,255,.4);max-width:480px;line-height:1.7;margin:22px auto 0;animation:fadeUp .7s .45s both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+.divider{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(232,168,48,.25),transparent);}
+
+/* CARDS */
+.reviews-wrap{max-width:1100px;margin:0 auto;padding:64px 24px 80px;}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+
+.review-card{
+  background:var(--dark2);
+  border-radius:22px;
+  border:1.5px solid rgba(255,255,255,.07);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform .3s cubic-bezier(.23,.86,.39,.96),border-color .3s,box-shadow .3s;
+}
+.review-card:hover{
+  transform:translateY(-10px);
+  border-color:rgba(232,168,48,.5);
+  box-shadow:0 20px 56px rgba(232,168,48,.1);
+}
+
+/* PHOTO */
+.card-photo{
+  width:100%;aspect-ratio:4/5;overflow:hidden;position:relative;
+  background:#111;
+}
+.card-photo img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .6s cubic-bezier(.4,0,.2,1);
+  display:block;
+}
+.review-card:hover .card-photo img{transform:scale(1.04);}
+
+/* PHOTO OVERLAY — gradient at bottom */
+.card-photo::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(20,20,20,.7) 0%,transparent 50%);
+  pointer-events:none;
+}
+
+/* BODY */
+.card-body{padding:24px 24px 28px;display:flex;flex-direction:column;gap:12px;flex:1;}
+
+.card-stars{
+  display:flex;gap:3px;
+  font-size:18px;
+  color:var(--gold);
+  line-height:1;
+}
+
+.card-quote{
+  font-size:14.5px;line-height:1.7;
+  color:rgba(255,255,255,.7);
+  font-style:italic;
+  flex:1;
+}
+.card-quote::before{content:'\201C';}
+.card-quote::after{content:'\201D';}
+
+.card-author{
+  display:flex;align-items:center;gap:10px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.author-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#c98e1a);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:800;color:#000;flex-shrink:0;
+}
+.author-info{display:flex;flex-direction:column;gap:2px;}
+.author-name{font-size:14px;font-weight:700;color:var(--white);}
+.author-handle{font-size:12px;color:rgba(255,255,255,.35);}
+
+/* CTA */
+.reviews-cta{
+  text-align:center;margin-top:56px;padding:48px 36px;
+  background:linear-gradient(135deg,rgba(232,168,48,.08),rgba(232,168,48,.02));
+  border:1px solid rgba(232,168,48,.18);border-radius:22px;
+}
+.reviews-cta h2{font-size:clamp(20px,3.5vw,30px);font-weight:800;letter-spacing:-.5px;margin-bottom:8px;}
+.reviews-cta h2 span{color:var(--gold);}
+.reviews-cta p{font-size:14px;color:rgba(255,255,255,.4);margin-bottom:24px;}
+.cta-gold{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;border-radius:100px;background:var(--gold);color:#000;font-weight:800;font-size:14px;font-family:inherit;text-decoration:none;transition:background .2s,transform .2s,box-shadow .2s;}
+.cta-gold:hover{background:var(--gold-dark);transform:translateY(-2px);box-shadow:0 12px 32px rgba(232,168,48,.3);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:none;}
+.reveal-d1{transition-delay:.05s;}
+.reveal-d2{transition-delay:.15s;}
+.reveal-d3{transition-delay:.25s;}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,.06);padding:28px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:relative;z-index:1;}
+footer .copy{font-size:12px;color:rgba(255,255,255,.25);}
+footer a{color:var(--gold);text-decoration:none;}
+
+@media(max-width:860px){
+  .reviews-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto;}
+}
+@media(max-width:640px){
+  nav{padding:14px 16px;}
+  .nav-link{padding:6px 10px;font-size:11px;}
+  .reviews-cta{padding:32px 20px;}
+  footer{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div id="spotlight"></div>
+<div class="dot-grid"></div>
+<div class="shapes">
+  <div class="shape s1"></div><div class="shape s2"></div>
+  <div class="shape s3"></div><div class="shape s4"></div><div class="shape s5"></div>
+</div>
+
+<div class="page">
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-left">
+    <a href="customlab-order-form.html" class="nav-link">← Order</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="pricing.html" class="nav-link">Pricing</a>
+    <a href="gallery.html" class="nav-link">Our Work</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="terms.html" class="nav-link">Terms</a>
+  </div>
+  <div class="nav-logo">
+    <img src="logo.png" alt="CustomLabX"/>
+  </div>
+  <div class="nav-right">
+    <div class="nav-badge"><span></span>Open for orders</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="reviews-hero">
+  <div class="hero-eyebrow">
+    <div class="hero-eyebrow-dot">★</div>
+    Real customers. Real results.
+  </div>
+  <h1 class="reviews-headline">What Our<br/><span class="hl-gold">Customers Say</span></h1>
+  <p class="reviews-sub">Every pair tells a story. Here are a few from the people who wear them.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- CARDS -->
+<div class="reviews-wrap">
+  <div class="reviews-grid">
+
+    <!-- CARD 1 — Taleen -->
+    <div class="review-card reveal reveal-d1">
+      <div class="card-photo">
+        <img src="testimonials/taleen.jpg" alt="Taleen's custom Air Force 1s"/>
+      </div>
+      <div class="card-body">
+        <div class="card-stars">★★★★★</div>
+        <p class="card-quote">The design completely exceeded my expectations. I described what I had in mind and they delivered something even better than I imagined. Every single detail was perfect.</p>
+        <div class="card-author">
+          <div class="author-avatar">T</div>
+          <div class="author-info">
+            <span class="author-name">Taleen</span>
+            <span class="author-handle">@taleen</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2 — Naya -->
+    <div class="review-card reveal reveal-d2">
+      <div class="card-photo">
+        <img src="testimonials/naya.jpg" alt="Naya's custom Air Force 1s"/>
+      </div>
+      <div class="card-body">
+        <div class="card-stars">★★★★★</div>
+        <p class="card-quote">I got these as a gift and everyone kept asking where I got them. The compliments haven't stopped since. Gifting custom shoes was the best decision I've ever made.</p>
+        <div class="card-author">
+          <div class="author-avatar">N</div>
+          <div class="author-info">
+            <span class="author-name">Naya</span>
+            <span class="author-handle">@naya</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3 — Hekmat -->
+    <div class="review-card reveal reveal-d3">
+      <div class="card-photo">
+        <img src="testimonials/myshoes.jpg" alt="Hekmat's custom Air Force 1s"/>
+      </div>
+      <div class="card-body">
+        <div class="card-stars">★★★★★</div>
+        <p class="card-quote">Fast communication from start to finish, and the result was exactly what I asked for. The quality of the paint and the finish is next level. Will definitely order again.</p>
+        <div class="card-author">
+          <div class="author-avatar">H</div>
+          <div class="author-info">
+            <span class="author-name">Hekmat</span>
+            <span class="author-handle">@hekmat</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="reviews-cta reveal">
+    <h2>Ready to be our <span>next review?</span></h2>
+    <p>Tell us your vision and we'll make it happen. No payment until you approve the result.</p>
+    <a href="customlab-order-form.html" class="cta-gold">Design Your Kicks →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="copy">© 2026 Custom Lab. All rights reserved.</span>
+  <span class="copy">Hand painted in Saudi Arabia · <a href="https://www.instagram.com/customlabx" target="_blank">@customlabx</a></span>
+</footer>
+
+</div>
+
+<script>
+document.addEventListener('mousemove', e => {
+  document.getElementById('spotlight').style.setProperty('--mx', e.clientX + 'px');
+  document.getElementById('spotlight').style.setProperty('--my', e.clientY + 'px');
+});
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+},{passive:true});
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
+},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+</script>
+</body>
+</html>
