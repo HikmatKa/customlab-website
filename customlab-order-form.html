@@ -767,7 +767,13 @@ footer a{color:var(--gold);text-decoration:none;}
         <p class="hint">Deadline, delivery city, special requests…</p>
       </div>
 
-      <button type="submit" class="submit-btn" id="submitBtn">
+      <label class="terms-check-row" id="orderTermsRow">
+        <input type="checkbox" id="orderTermsCheck" onchange="document.getElementById('submitBtn').disabled=!this.checked"/>
+        <span class="terms-check-box"></span>
+        <span class="terms-check-label">I have read and agree to the <a href="terms.html" target="_blank">Terms &amp; Conditions</a></span>
+      </label>
+
+      <button type="submit" class="submit-btn" id="submitBtn" disabled>
         <span class="btn-row">
           <span class="spin" id="spinner"></span>
           <span id="btnTxt">🚀 Send My Commission Request</span>
@@ -917,6 +923,11 @@ const txt  = document.getElementById('btnTxt');
 
 form.addEventListener('submit', async e => {
   e.preventDefault();
+  if (!document.getElementById('orderTermsCheck').checked) {
+    document.getElementById('orderTermsRow').style.borderColor = 'rgba(255,80,80,.6)';
+    document.getElementById('orderTermsRow').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
   btn.disabled = true;
   spin.style.display = 'block';
   txt.textContent = 'Sending…';
