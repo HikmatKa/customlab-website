@@ -919,11 +919,11 @@ document.querySelectorAll('select').forEach(s => {
 
 // ── Supabase ──
 const SB_URL = 'https://chtlvevmvoqkskvrlona.supabase.co';
-const SB_KEY = 'sb_publishable_f_qfC2TNaSZEFFkDzImYMw_vsKG4Jon';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNodGx2ZXZtdm9xa3NrdnJsb25hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1ODczMjksImV4cCI6MjA5ODE2MzMyOX0.EjFm2-T7lCGPFREoP1b1Oi8bT2lFQEoCkLtPnhq9k5o';
 async function sbInsert(table, data) {
   const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
     method: 'POST',
-    headers: {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+    headers: {'Content-Type':'application/json','apikey':SB_ANON,'Authorization':'Bearer '+SB_ANON,'Prefer':'return=minimal'},
     body: JSON.stringify(data)
   });
   if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.message||'Supabase error '+r.status); }
