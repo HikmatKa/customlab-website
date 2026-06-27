@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Terms &amp; Conditions — CustomLabX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--gold:#E8A830;--gold-dark:#c98e1a;--dark:#0d0d0d;--dark2:#141414;--white:#fff;}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--dark);color:var(--white);overflow-x:hidden;}
+
+#spotlight{pointer-events:none;position:fixed;inset:0;z-index:0;background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(232,168,48,.06),transparent 70%);transition:background .1s;}
+.dot-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);background-size:28px 28px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,#000 40%,transparent 100%);}
+
+.page{position:relative;z-index:1;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 40px;transition:background .3s,backdrop-filter .3s,border-color .3s;border-bottom:1px solid transparent;}
+nav.scrolled{background:rgba(13,13,13,.92);backdrop-filter:blur(20px);border-color:rgba(232,168,48,.15);}
+.nav-left{grid-column:1;display:flex;align-items:center;gap:6px;}
+.nav-logo{grid-column:2;display:flex;align-items:center;justify-content:center;}
+.nav-logo img{height:72px;width:auto;object-fit:contain;filter:drop-shadow(0 0 18px rgba(232,168,48,.45)) brightness(1.15);transition:transform .3s,filter .3s;}
+.nav-logo img:hover{transform:scale(1.06);filter:drop-shadow(0 0 28px rgba(232,168,48,.7)) brightness(1.2);}
+.nav-right{grid-column:3;display:flex;align-items:center;justify-content:flex-end;}
+.nav-link{font-size:13px;font-weight:700;color:rgba(255,255,255,.6);text-decoration:none;padding:8px 18px;border-radius:100px;transition:color .2s,background .2s;}
+.nav-link:hover{color:var(--gold);background:rgba(232,168,48,.08);}
+.nav-badge{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:100px;border:1px solid rgba(232,168,48,.3);background:rgba(232,168,48,.07);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);}
+.nav-badge span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+
+/* HERO */
+.terms-hero{padding:140px 24px 40px;text-align:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);border-radius:100px;padding:6px 18px 6px 10px;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:24px;animation:fadeUp .7s .2s both;}
+.hero-eyebrow-dot{width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:9px;color:#000;font-weight:800;}
+.terms-headline{font-size:clamp(36px,6vw,72px);font-weight:800;line-height:.95;letter-spacing:-2px;animation:fadeUp .7s .3s both;}
+.terms-headline span{color:var(--gold);}
+.terms-meta{font-size:13px;color:rgba(255,255,255,.35);margin-top:16px;animation:fadeUp .7s .4s both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+/* TOC */
+.divider{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(232,168,48,.2),transparent);margin:0;}
+.toc-wrap{max-width:860px;margin:0 auto;padding:40px 24px 0;}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;}
+.toc-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);text-decoration:none;font-size:12px;font-weight:600;color:rgba(255,255,255,.45);transition:border-color .2s,color .2s,background .2s;}
+.toc-item:hover{border-color:rgba(232,168,48,.3);color:var(--gold);background:rgba(232,168,48,.05);}
+.toc-num{font-size:10px;font-weight:800;color:var(--gold);opacity:.7;min-width:18px;}
+
+/* CONTENT */
+.terms-wrap{max-width:860px;margin:0 auto;padding:48px 24px 120px;}
+.section-block{margin-bottom:44px;border-left:2px solid rgba(232,168,48,.2);padding-left:24px;}
+.section-block:target .section-title{color:var(--gold);}
+.section-num{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(232,168,48,.6);margin-bottom:8px;}
+.section-title{font-size:clamp(18px,3vw,22px);font-weight:800;letter-spacing:-.5px;margin-bottom:14px;color:var(--white);transition:color .3s;}
+.section-body{font-size:14.5px;line-height:1.8;color:rgba(255,255,255,.6);}
+.section-body p{margin-bottom:12px;}
+.section-body p:last-child{margin-bottom:0;}
+.section-body ul{padding-left:20px;margin-bottom:12px;}
+.section-body ul li{margin-bottom:6px;}
+.section-body strong{color:rgba(255,255,255,.85);font-weight:700;}
+.subsection{margin-top:20px;}
+.subsection-title{font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px;}
+
+/* CTA BANNER */
+.terms-cta{
+  background:linear-gradient(135deg,rgba(232,168,48,.1),rgba(232,168,48,.03));
+  border:1px solid rgba(232,168,48,.2);border-radius:20px;
+  padding:40px 36px;text-align:center;margin-bottom:48px;
+}
+.terms-cta h2{font-size:clamp(18px,3vw,24px);font-weight:800;margin-bottom:8px;}
+.terms-cta h2 span{color:var(--gold);}
+.terms-cta p{font-size:14px;color:rgba(255,255,255,.4);margin-bottom:24px;line-height:1.6;}
+.cta-gold{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;border-radius:100px;background:var(--gold);color:#000;font-weight:800;font-size:14px;font-family:inherit;text-decoration:none;transition:background .2s,transform .2s;}
+.cta-gold:hover{background:var(--gold-dark);transform:translateY(-2px);}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,.06);padding:28px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:relative;z-index:1;}
+footer .copy{font-size:12px;color:rgba(255,255,255,.25);}
+footer a{color:var(--gold);text-decoration:none;}
+
+@media(max-width:640px){
+  nav{padding:14px 20px;}
+  .section-block{padding-left:16px;}
+  footer{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div id="spotlight"></div>
+<div class="dot-grid"></div>
+
+<div class="page">
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-left">
+    <a href="customlab-order-form.html" class="nav-link">← Order</a>
+    <a href="about.html" class="nav-link">About</a>
+    <a href="gallery.html" class="nav-link">Our Work</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+  </div>
+  <div class="nav-logo">
+    <img src="logo.png" alt="CustomLabX"/>
+  </div>
+  <div class="nav-right">
+    <div class="nav-badge"><span></span>Open for orders</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="terms-hero">
+  <div class="hero-eyebrow">
+    <div class="hero-eyebrow-dot">§</div>
+    Kingdom of Saudi Arabia
+  </div>
+  <h1 class="terms-headline">Terms &amp; <span>Conditions</span></h1>
+  <p class="terms-meta">Last Updated: June 2026 &nbsp;·&nbsp; Custom Lab (@customlabx)</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOC -->
+<div class="toc-wrap">
+  <div class="toc-grid">
+    <a href="#s1" class="toc-item"><span class="toc-num">01</span>Acceptance of Terms</a>
+    <a href="#s2" class="toc-item"><span class="toc-num">02</span>Orders &amp; Confirmation</a>
+    <a href="#s3" class="toc-item"><span class="toc-num">03</span>Pricing &amp; VAT</a>
+    <a href="#s4" class="toc-item"><span class="toc-num">04</span>Payment Terms</a>
+    <a href="#s5" class="toc-item"><span class="toc-num">05</span>Production Timeline</a>
+    <a href="#s6" class="toc-item"><span class="toc-num">06</span>Design &amp; Client Responsibilities</a>
+    <a href="#s7" class="toc-item"><span class="toc-num">07</span>Quality &amp; Defects</a>
+    <a href="#s8" class="toc-item"><span class="toc-num">08</span>Delivery &amp; Handover</a>
+    <a href="#s9" class="toc-item"><span class="toc-num">09</span>Cancellations &amp; Refunds</a>
+    <a href="#s10" class="toc-item"><span class="toc-num">10</span>Intellectual Property</a>
+    <a href="#s11" class="toc-item"><span class="toc-num">11</span>Privacy &amp; Data</a>
+    <a href="#s12" class="toc-item"><span class="toc-num">12</span>Limitation of Liability</a>
+    <a href="#s13" class="toc-item"><span class="toc-num">13</span>Dispute Resolution</a>
+    <a href="#s14" class="toc-item"><span class="toc-num">14</span>Governing Law</a>
+    <a href="#s15" class="toc-item"><span class="toc-num">15</span>Contact Us</a>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="terms-wrap">
+
+  <div class="section-block" id="s1">
+    <div class="section-num">Section 01</div>
+    <h2 class="section-title">Acceptance of Terms</h2>
+    <div class="section-body">
+      <p>By submitting an order request via Instagram direct message or any other channel operated by Custom Lab, you acknowledge that:</p>
+      <ul>
+        <li>You are at least 18 years of age, or have the consent of a parent or legal guardian.</li>
+        <li>You have provided accurate personal and delivery information.</li>
+        <li>You agree to be bound by these Terms, which form a legally binding contract between you and Custom Lab.</li>
+      </ul>
+      <p>These Terms may be updated periodically; the version in effect at the time of your order shall apply.</p>
+    </div>
+  </div>
+
+  <div class="section-block" id="s2">
+    <div class="section-num">Section 02</div>
+    <h2 class="section-title">Orders &amp; Order Confirmation</h2>
+    <div class="section-body">
+      <div class="subsection">
+        <div class="subsection-title">2.1 Order Process</div>
+        <p>All orders are initiated through Custom Lab's official Instagram account (@customlabx). An order is only confirmed once:</p>
+        <ul>
+          <li>The Client has submitted full design requirements, shoe size, and agreed to the quoted price.</li>
+          <li>A deposit payment has been received and confirmed by Custom Lab (see Section 4).</li>
+          <li>Custom Lab has sent a written order confirmation via Instagram direct message.</li>
+        </ul>
+        <p>Custom Lab reserves the right to refuse or cancel any order at its sole discretion, in which case any paid amount will be fully refunded.</p>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">2.2 Custom Nature of Orders</div>
+        <p>All products are custom-made to the Client's specifications. Because each pair is unique and produced exclusively for the ordering Client, standard return and exchange rights under Article (13) of the Saudi Consumer Protection Law do not apply to completed custom orders, except in cases of defect or non-conformity with agreed specifications (see Section 7).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block" id="s3">
+    <div class="section-num">Section 03</div>
+    <h2 class="section-title">Pricing &amp; Value Added Tax (VAT)</h2>
+    <div class="section-body">
+      <p>All prices quoted by Custom Lab are in Saudi Riyals (SAR) and are inclusive of VAT at the applicable rate (currently 15%) as required by the Zakat, Tax and Customs Authority (ZATCA) of the Kingdom of Saudi Arabia.</p>
+      <ul>
+        <li>Final pricing is confirmed in writing before any payment is required.</li>
+        <li>Prices quoted are valid for 48 hours from the date of quotation.</li>
+        <li>The cost of the base Nike Air Force 1 shoe (if purchased by Custom Lab on the Client's behalf) will be stated separately in the quotation.</li>
+        <li>Shipping and delivery fees, if applicable, are additional and will be disclosed at the time of order confirmation.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-block" id="s4">
+    <div class="section-num">Section 04</div>
+    <h2 class="section-title">Payment Terms</h2>
+    <div class="section-body">
+      <div class="subsection">
+        <div class="subsection-title">4.1 Deposit</div>
+        <p>A <strong>non-refundable deposit of 50%</strong> of the total order value is required to begin work on any custom order. Work will not commence until the deposit is received and confirmed.</p>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">4.2 Final Payment</div>
+        <p>The remaining balance (50%) is due upon completion of the custom artwork and before delivery or handover of the finished product. Photographic proof of the completed work will be shared with the Client for approval prior to final payment.</p>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">4.3 Payment Methods</div>
+        <p>Accepted payment methods will be communicated at the time of order. All payments must be made through official channels as instructed by Custom Lab. Custom Lab is not liable for payments made to unofficial or unverified accounts.</p>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">4.4 Late Payment</div>
+        <p>If the final balance is not received within <strong>7 calendar days</strong> of completion notification, Custom Lab reserves the right to list the finished product for resale to recover costs. The deposit paid will be forfeited in such cases.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block" id="s5">
+    <div class="section-num">Section 05</div>
+    <h2 class="section-title">Production Timeline</h2>
+    <div class="section-body">
+      <p>Standard production time is <strong>7 to 21 business days</strong> from receipt of the deposit, depending on design complexity. Custom Lab will provide an estimated completion date at the time of order confirmation.</p>
+      <ul>
+        <li>Timelines are estimates and not guarantees.</li>
+        <li>Delays may occur due to supply issues, design complexity, or circumstances beyond our control. Custom Lab will notify the Client promptly of any anticipated delays.</li>
+        <li>Urgent or rush orders may be accommodated at Custom Lab's discretion and may incur an additional fee.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-block" id="s6">
+    <div class="section-num">Section 06</div>
+    <h2 class="section-title">Design &amp; Client Responsibilities</h2>
+    <div class="section-body">
+      <ul>
+        <li>The Client is solely responsible for providing accurate and complete design instructions.</li>
+        <li>Custom Lab will not be held liable for errors or dissatisfaction arising from incorrect, incomplete, or ambiguous instructions provided by the Client.</li>
+        <li>Design references, color codes, and written instructions must be submitted clearly via Instagram direct message before work begins.</li>
+        <li>Any design changes requested after work has commenced may incur additional charges and extend the production timeline.</li>
+        <li>Custom Lab retains the right to photograph and share completed work on its social media platforms (@customlabx on Instagram and TikTok) unless the Client expressly requests confidentiality in writing before order placement.</li>
+        <li>The Client warrants that any logos, characters, or images requested do not infringe upon any third-party intellectual property rights. Custom Lab assumes no liability for any intellectual property violations arising from Client-provided designs.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-block" id="s7">
+    <div class="section-num">Section 07</div>
+    <h2 class="section-title">Quality Assurance &amp; Defects</h2>
+    <div class="section-body">
+      <p>Custom Lab takes pride in the quality of its work and uses professional-grade paint and sealant. In accordance with the Saudi Consumer Protection Law:</p>
+      <ul>
+        <li>If a finished product is materially defective or significantly deviates from the agreed design specifications, the Client must notify Custom Lab within <strong>48 hours of receiving the product</strong>, providing photographic evidence.</li>
+        <li>Custom Lab will assess the claim and, if found valid, will offer a remedy which may include repair, redo of the affected area, or — where a remedy is not feasible — a partial or full refund at Custom Lab's discretion.</li>
+        <li>Defects arising from normal wear and tear, improper use, exposure to water or harsh conditions, or modifications made by a third party are <strong>not covered</strong>.</li>
+        <li>Minor variations in color or design compared to digital references are inherent to hand-painted custom work and do not constitute defects.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-block" id="s8">
+    <div class="section-num">Section 08</div>
+    <h2 class="section-title">Delivery &amp; Handover</h2>
+    <div class="section-body">
+      <ul>
+        <li>Delivery options (pickup, local delivery, or shipping via courier) will be agreed upon at the time of order confirmation.</li>
+        <li>Risk of damage or loss transfers to the Client upon handover to a courier or upon personal collection.</li>
+        <li>Custom Lab is not responsible for delays or damage caused by third-party courier services once the product has been dispatched.</li>
+        <li>Delivery fees are the Client's responsibility unless otherwise agreed in writing.</li>
+        <li>For orders shipped within the Kingdom of Saudi Arabia, estimated delivery is <strong>2 to 5 business days</strong> after dispatch, depending on the destination.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-block" id="s9">
+    <div class="section-num">Section 09</div>
+    <h2 class="section-title">Cancellations &amp; Refunds</h2>
+    <div class="section-body">
+      <p>Given the bespoke nature of custom orders, the following cancellation policy applies:</p>
+      <ul>
+        <li><strong>Before work commences:</strong> the deposit may be refunded at Custom Lab's discretion, less any administrative costs incurred.</li>
+        <li><strong>After work commences:</strong> the deposit is non-refundable. The Client may be liable for additional costs if materials have been purchased specifically for the order.</li>
+        <li>Custom Lab reserves the right to cancel any order that violates these Terms, applicable law, or ethical standards. A full refund will be issued in such cases.</li>
+        <li>Refunds, where applicable, will be processed within <strong>14 business days</strong> through the original payment method.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-block" id="s10">
+    <div class="section-num">Section 10</div>
+    <h2 class="section-title">Intellectual Property</h2>
+    <div class="section-body">
+      <ul>
+        <li>All original artwork, designs, and creative concepts produced by Custom Lab remain the intellectual property of Custom Lab, unless explicitly transferred to the Client in writing.</li>
+        <li>The Client receives a limited, non-commercial license to use photographs of their finished product for personal purposes.</li>
+        <li>Custom Lab retains the right to use images of completed work for portfolio, marketing, and social media purposes.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-block" id="s11">
+    <div class="section-num">Section 11</div>
+    <h2 class="section-title">Privacy &amp; Personal Data</h2>
+    <div class="section-body">
+      <p>Custom Lab collects personal data (name, contact details, delivery address) solely for the purpose of fulfilling your order. This data is handled in accordance with the Saudi Personal Data Protection Law (PDPL) and will not be sold or shared with third parties except where required for delivery or by law.</p>
+      <p>You have the right to request access to, correction of, or deletion of your personal data by contacting us via Instagram.</p>
+    </div>
+  </div>
+
+  <div class="section-block" id="s12">
+    <div class="section-num">Section 12</div>
+    <h2 class="section-title">Limitation of Liability</h2>
+    <div class="section-body">
+      <p>To the maximum extent permitted by Saudi law, Custom Lab's liability in connection with any order shall not exceed the total amount paid by the Client for that specific order.</p>
+      <p>Custom Lab shall not be liable for indirect, consequential, or incidental losses arising from the use or inability to use the custom product.</p>
+    </div>
+  </div>
+
+  <div class="section-block" id="s13">
+    <div class="section-num">Section 13</div>
+    <h2 class="section-title">Dispute Resolution</h2>
+    <div class="section-body">
+      <p>In the event of a dispute, the Client is encouraged to first contact Custom Lab directly via Instagram to seek an amicable resolution.</p>
+      <p>If a resolution cannot be reached, disputes shall be subject to the jurisdiction of the competent courts of the Kingdom of Saudi Arabia, in accordance with Saudi law. Clients may also raise complaints with the Saudi Consumer Protection Authority (CPA) through their official channels.</p>
+    </div>
+  </div>
+
+  <div class="section-block" id="s14">
+    <div class="section-num">Section 14</div>
+    <h2 class="section-title">Governing Law</h2>
+    <div class="section-body">
+      <p>These Terms are governed by and construed in accordance with the laws of the Kingdom of Saudi Arabia, including but not limited to:</p>
+      <ul>
+        <li>Consumer Protection Law (Royal Decree No. M/25, 1422H / 2001G)</li>
+        <li>E-Commerce Law (Royal Decree No. M/126, 1440H / 2019G)</li>
+        <li>VAT Regulations administered by ZATCA</li>
+        <li>Personal Data Protection Law (PDPL)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-block" id="s15">
+    <div class="section-num">Section 15</div>
+    <h2 class="section-title">Contact Us</h2>
+    <div class="section-body">
+      <p>For any questions, concerns, or complaints regarding these Terms or your order, please contact us:</p>
+      <ul>
+        <li>Instagram: <strong>@customlabx</strong></li>
+        <li>Email: <strong>hikmattgp@gmail.com</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="terms-cta">
+    <h2>Ready to place your <span>order?</span></h2>
+    <p>By proceeding you confirm you have read and agree to these Terms in full.</p>
+    <a href="customlab-order-form.html" class="cta-gold">Design Your Kicks →</a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="copy">© 2026 Custom Lab. All rights reserved.</span>
+  <span class="copy">Hand painted in Saudi Arabia · <a href="https://www.instagram.com/customlabx" target="_blank">@customlabx</a></span>
+</footer>
+
+</div>
+
+<script>
+document.addEventListener('mousemove', e => {
+  document.getElementById('spotlight').style.setProperty('--mx', e.clientX + 'px');
+  document.getElementById('spotlight').style.setProperty('--my', e.clientY + 'px');
+});
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+},{passive:true});
+</script>
+</body>
+</html>

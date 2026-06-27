@@ -472,12 +472,22 @@ footer a{color:var(--gold);text-decoration:none;}
 .amount-wrap:focus-within .amount-prefix{color:var(--gold);}
 #pay-amount{padding-left:56px !important;}
 .amount-wrap label{left:56px;}
+.terms-check-row{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);margin-bottom:14px;cursor:pointer;transition:border-color .2s,background .2s;}
+.terms-check-row:hover{border-color:rgba(232,168,48,.3);background:rgba(232,168,48,.04);}
+.terms-check-row input[type=checkbox]{display:none;}
+.terms-check-box{flex-shrink:0;width:20px;height:20px;border-radius:5px;border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);transition:border-color .2s,background .2s;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+.terms-check-row input:checked + .terms-check-box{border-color:var(--gold);background:var(--gold);}
+.terms-check-row input:checked + .terms-check-box::after{content:'✓';color:#000;font-size:12px;font-weight:800;line-height:1;}
+.terms-check-label{font-size:13px;color:rgba(255,255,255,.55);line-height:1.5;}
+.terms-check-label a{color:var(--gold);text-decoration:underline;text-underline-offset:3px;}
+.terms-check-label a:hover{color:#fff;}
 .pay-confirm-btn{width:100%;padding:17px 24px;background:#111;color:#fff;border:none;
   border-radius:12px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;
-  position:relative;overflow:hidden;transition:background .2s,transform .18s;
+  position:relative;overflow:hidden;transition:background .2s,transform .18s,opacity .2s;
   box-shadow:0 4px 20px rgba(0,0,0,.2);}
-.pay-confirm-btn:hover{background:#222;transform:translateY(-2px);}
+.pay-confirm-btn:not(:disabled):hover{background:#222;transform:translateY(-2px);}
 .pay-confirm-btn:active{transform:none;}
+.pay-confirm-btn:disabled{opacity:.4;cursor:not-allowed;}
 #moyasar-wrapper{display:none;}
 .amount-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;
   border-radius:100px;background:rgba(232,168,48,.1);border:1px solid rgba(232,168,48,.3);
@@ -538,6 +548,7 @@ footer a{color:var(--gold);text-decoration:none;}
     <a href="about.html" style="font-size:13px;font-weight:700;color:rgba(255,255,255,.6);text-decoration:none;padding:8px 18px;border-radius:100px;transition:color .2s,background .2s;" onmouseover="this.style.color='#E8A830';this.style.background='rgba(232,168,48,.08)'" onmouseout="this.style.color='rgba(255,255,255,.6)';this.style.background=''">About</a>
     <a href="gallery.html" style="font-size:13px;font-weight:700;color:rgba(255,255,255,.6);text-decoration:none;padding:8px 18px;border-radius:100px;transition:color .2s,background .2s;" onmouseover="this.style.color='#E8A830';this.style.background='rgba(232,168,48,.08)'" onmouseout="this.style.color='rgba(255,255,255,.6)';this.style.background=''">Our Work</a>
     <a href="contact.html" style="font-size:13px;font-weight:700;color:rgba(255,255,255,.6);text-decoration:none;padding:8px 18px;border-radius:100px;transition:color .2s,background .2s;" onmouseover="this.style.color='#E8A830';this.style.background='rgba(232,168,48,.08)'" onmouseout="this.style.color='rgba(255,255,255,.6)';this.style.background=''">Contact</a>
+    <a href="terms.html" style="font-size:13px;font-weight:700;color:rgba(255,255,255,.6);text-decoration:none;padding:8px 18px;border-radius:100px;transition:color .2s,background .2s;" onmouseover="this.style.color='#E8A830';this.style.background='rgba(232,168,48,.08)'" onmouseout="this.style.color='rgba(255,255,255,.6)';this.style.background=''">Terms</a>
   </div>
   <div class="nav-logo">
     <img src="logo.png" alt="Custom Lab"/>
@@ -811,7 +822,12 @@ footer a{color:var(--gold);text-decoration:none;}
         </div>
       </div>
       <div class="pay-error-inline" id="payErr">Please enter a valid amount (minimum 1 SAR).</div>
-      <button class="pay-confirm-btn" id="payConfirmBtn" onclick="initPayment()">Proceed to Secure Payment →</button>
+      <label class="terms-check-row" id="termsRow">
+        <input type="checkbox" id="termsCheck" onchange="document.getElementById('payConfirmBtn').disabled=!this.checked"/>
+        <span class="terms-check-box"></span>
+        <span class="terms-check-label">I have read and agree to the <a href="terms.html" target="_blank">Terms &amp; Conditions</a></span>
+      </label>
+      <button class="pay-confirm-btn" id="payConfirmBtn" onclick="initPayment()" disabled>Proceed to Secure Payment →</button>
     </div>
 
     <!-- STEP 2: Moyasar card form -->
@@ -997,8 +1013,9 @@ function resetPayment() {
   document.getElementById('paySuccess').style.display = 'none';
   document.getElementById('payFailed').style.display = 'none';
   document.getElementById('payErr').style.display = 'none';
-  // Moyasar replaces #mysr-form element; recreate it so next init works
   document.getElementById('mysr-container').innerHTML = '<div id="mysr-form"></div>';
+  const tc = document.getElementById('termsCheck');
+  if (tc) { tc.checked = false; document.getElementById('payConfirmBtn').disabled = true; }
   window.history.replaceState({}, '', window.location.pathname);
 }
 
