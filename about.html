@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About Us — CustomLabX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#E8A830;
+  --gold-dark:#c98e1a;
+  --gold-15:rgba(232,168,48,.15);
+  --gold-glow:rgba(232,168,48,.4);
+  --dark:#0d0d0d;
+  --dark2:#141414;
+  --white:#fff;
+  --muted:#777;
+  --r:14px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--dark);color:var(--white);overflow-x:hidden;}
+
+#spotlight{
+  pointer-events:none;position:fixed;inset:0;z-index:0;
+  background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(232,168,48,.07),transparent 70%);
+  transition:background .1s;
+}
+.dot-grid{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(255,255,255,.07) 1px,transparent 1px);
+  background-size:28px 28px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,#000 40%,transparent 100%);
+}
+.shapes{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.shape{position:absolute;border-radius:9999px;border:2px solid rgba(232,168,48,.18);backdrop-filter:blur(2px);}
+.shape::after{content:'';position:absolute;inset:0;border-radius:9999px;background:radial-gradient(circle at 50% 50%,rgba(232,168,48,.12),transparent 70%);}
+.s1{width:560px;height:130px;top:12%;left:-8%;transform:rotate(12deg);animation:shapeIn1 2.2s .3s cubic-bezier(.23,.86,.39,.96) both,floatA 14s 2.5s ease-in-out infinite;}
+.s2{width:420px;height:100px;bottom:22%;right:-4%;transform:rotate(-14deg);animation:shapeIn2 2.2s .5s cubic-bezier(.23,.86,.39,.96) both,floatB 18s 2.7s ease-in-out infinite;}
+.s3{width:260px;height:70px;bottom:8%;left:8%;transform:rotate(-7deg);animation:shapeIn1 2.2s .4s cubic-bezier(.23,.86,.39,.96) both,floatC 22s 2.9s ease-in-out infinite;border-color:rgba(232,168,48,.09);}
+.s4{width:180px;height:50px;top:8%;right:18%;transform:rotate(20deg);animation:shapeIn2 2.2s .6s cubic-bezier(.23,.86,.39,.96) both,floatA 12s 3.1s ease-in-out infinite;border-color:rgba(232,168,48,.12);}
+.s5{width:130px;height:36px;top:4%;left:24%;transform:rotate(-24deg);animation:shapeIn1 2.2s .7s cubic-bezier(.23,.86,.39,.96) both,floatB 16s 3.3s ease-in-out infinite;border-color:rgba(232,168,48,.08);}
+@keyframes shapeIn1{from{opacity:0;transform:rotate(var(--r,12deg)) translateY(-120px);}to{opacity:1;}}
+@keyframes shapeIn2{from{opacity:0;transform:rotate(var(--r,-14deg)) translateY(-120px);}to{opacity:1;}}
+@keyframes floatA{0%,100%{transform:rotate(12deg) translateY(0);}50%{transform:rotate(12deg) translateY(16px);}}
+@keyframes floatB{0%,100%{transform:rotate(-14deg) translateY(0);}50%{transform:rotate(-14deg) translateY(-14px);}}
+@keyframes floatC{0%,100%{transform:rotate(-7deg) translateY(0);}50%{transform:rotate(-7deg) translateY(10px);}}
+
+.page{position:relative;z-index:1;}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  padding:14px 40px;
+  transition:background .3s,backdrop-filter .3s,border-color .3s;
+  border-bottom:1px solid transparent;
+}
+nav.scrolled{background:rgba(13,13,13,.92);backdrop-filter:blur(20px);border-color:rgba(232,168,48,.15);}
+.nav-left{grid-column:1;display:flex;align-items:center;justify-content:flex-start;}
+.nav-logo{grid-column:2;display:flex;align-items:center;justify-content:center;}
+.nav-logo img{height:72px;width:auto;object-fit:contain;filter:drop-shadow(0 0 18px rgba(232,168,48,.45)) brightness(1.15);transition:transform .3s,filter .3s;}
+.nav-logo img:hover{transform:scale(1.06);filter:drop-shadow(0 0 28px rgba(232,168,48,.7)) brightness(1.2);}
+.nav-right{grid-column:3;display:flex;align-items:center;justify-content:flex-end;gap:12px;}
+.nav-link{font-size:13px;font-weight:700;color:rgba(255,255,255,.6);text-decoration:none;padding:8px 18px;border-radius:100px;transition:color .2s,background .2s;}
+.nav-link:hover{color:var(--gold);background:rgba(232,168,48,.08);}
+.nav-badge{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:100px;border:1px solid rgba(232,168,48,.3);background:rgba(232,168,48,.07);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);}
+.nav-badge span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.7);}}
+
+/* HERO */
+.about-hero{
+  min-height:60svh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:140px 24px 60px;
+  position:relative;
+}
+.about-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);
+  border-radius:100px;padding:6px 18px 6px 10px;
+  font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.55);
+  margin-bottom:28px;animation:fadeUp .7s .2s both;
+}
+.about-eyebrow-dot{width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:9px;color:#000;font-weight:800;}
+.about-headline{
+  font-size:clamp(52px,10vw,110px);font-weight:800;line-height:.95;
+  letter-spacing:-3px;animation:fadeUp .7s .35s both;
+}
+.about-headline .hl-white{color:var(--white);}
+.about-headline .hl-gold{color:var(--gold);}
+.about-sub{
+  font-size:clamp(14px,2vw,17px);color:rgba(255,255,255,.45);
+  max-width:520px;line-height:1.7;margin:24px auto 0;
+  animation:fadeUp .7s .5s both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+/* DIVIDER */
+.divider{
+  width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(232,168,48,.25),transparent);
+  margin:0;
+}
+
+/* CONTENT SECTIONS */
+.content-wrap{max-width:900px;margin:0 auto;padding:80px 24px 120px;}
+
+.section{margin-bottom:72px;animation:fadeUp .6s both;}
+.section-label{
+  font-size:10.5px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-label::before{content:'';width:24px;height:2px;background:var(--gold);}
+.section h2{
+  font-size:clamp(26px,4vw,38px);font-weight:800;line-height:1.15;
+  letter-spacing:-1px;margin-bottom:20px;
+}
+.section p{
+  font-size:15.5px;color:rgba(255,255,255,.55);line-height:1.8;margin-bottom:14px;
+}
+.section p:last-child{margin-bottom:0;}
+
+/* PROCESS STEPS */
+.process-grid{display:flex;flex-direction:column;gap:0;margin-top:8px;}
+.process-step{
+  display:flex;gap:20px;align-items:flex-start;
+  padding:20px 0;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.process-step:last-child{border-bottom:none;}
+.ps-num{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:var(--gold-15);border:1px solid rgba(232,168,48,.35);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:var(--gold);
+}
+.ps-body{}
+.ps-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px;}
+.ps-desc{font-size:13.5px;color:rgba(255,255,255,.4);line-height:1.65;}
+
+/* DIFFERENTIATORS GRID */
+.diff-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:16px;margin-top:8px;
+}
+.diff-card{
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;padding:24px;
+  transition:border-color .25s,background .25s;
+}
+.diff-card:hover{border-color:rgba(232,168,48,.3);background:rgba(232,168,48,.04);}
+.diff-icon{font-size:22px;margin-bottom:12px;}
+.diff-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:6px;}
+.diff-desc{font-size:12.5px;color:rgba(255,255,255,.38);line-height:1.6;}
+
+/* SOCIALS */
+.socials-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:24px;}
+.social-card{
+  display:flex;align-items:center;gap:12px;
+  padding:16px 24px;border-radius:14px;
+  border:1px solid rgba(232,168,48,.25);background:rgba(232,168,48,.06);
+  text-decoration:none;color:var(--white);
+  transition:background .2s,border-color .2s,transform .2s;
+  font-weight:700;font-size:14px;
+}
+.social-card:hover{background:rgba(232,168,48,.12);border-color:rgba(232,168,48,.5);transform:translateY(-2px);}
+.social-card svg{flex-shrink:0;}
+.social-sub{font-size:11px;font-weight:500;color:rgba(255,255,255,.4);margin-top:2px;}
+
+/* CLOSING BANNER */
+.closing-banner{
+  margin:80px 24px 0;
+  background:linear-gradient(135deg,rgba(232,168,48,.12),rgba(232,168,48,.04));
+  border:1px solid rgba(232,168,48,.22);border-radius:24px;
+  padding:56px 40px;text-align:center;
+  max-width:900px;margin-left:auto;margin-right:auto;
+}
+.closing-banner h2{font-size:clamp(24px,4vw,38px);font-weight:800;letter-spacing:-1px;margin-bottom:12px;}
+.closing-banner h2 span{color:var(--gold);}
+.closing-banner p{font-size:15px;color:rgba(255,255,255,.45);margin-bottom:32px;line-height:1.7;}
+.closing-banner .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.cta-gold{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 34px;border-radius:100px;
+  background:var(--gold);color:#000;
+  font-weight:800;font-size:14px;font-family:inherit;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:background .2s,transform .2s;
+}
+.cta-gold:hover{background:var(--gold-dark);transform:translateY(-2px);}
+.cta-outline{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 34px;border-radius:100px;
+  background:transparent;color:var(--white);
+  font-weight:700;font-size:14px;font-family:inherit;
+  text-decoration:none;border:1.5px solid rgba(255,255,255,.2);cursor:pointer;
+  transition:border-color .2s,background .2s,transform .2s;
+}
+.cta-outline:hover{border-color:rgba(232,168,48,.5);background:rgba(232,168,48,.06);transform:translateY(-2px);}
+
+/* FOOTER */
+footer{
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:28px 40px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;position:relative;z-index:1;
+}
+footer .copy{font-size:12px;color:rgba(255,255,255,.25);}
+footer a{color:var(--gold);text-decoration:none;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  nav{padding:14px 20px;}
+  .about-headline{letter-spacing:-2px;}
+  .diff-grid{grid-template-columns:1fr;}
+  .closing-banner{padding:36px 24px;}
+  footer{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div id="spotlight"></div>
+<div class="dot-grid"></div>
+<div class="shapes">
+  <div class="shape s1"></div>
+  <div class="shape s2"></div>
+  <div class="shape s3"></div>
+  <div class="shape s4"></div>
+  <div class="shape s5"></div>
+</div>
+
+<div class="page">
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-left">
+    <a href="customlab-order-form.html" class="nav-link">← Order</a>
+  </div>
+  <div class="nav-logo">
+    <img src="logo.png" alt="CustomLabX"/>
+  </div>
+  <div class="nav-right">
+    <div class="nav-badge"><span></span>Open for orders</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="about-hero">
+  <div class="about-eyebrow">
+    <div class="about-eyebrow-dot">✦</div>
+    Founded 2025 · Saudi Arabia
+  </div>
+  <h1 class="about-headline">
+    <span class="hl-white">Custom</span><br>
+    <span class="hl-gold">Lab<span class="hl-white">X</span></span>
+  </h1>
+  <p class="about-sub">One pair at a time. Every stroke by hand. No prints, no shortcuts — just wearable art built for you.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTENT -->
+<div class="content-wrap">
+
+  <!-- WHO WE ARE -->
+  <div class="section reveal">
+    <div class="section-label">Who We Are</div>
+    <h2>Built from the ground up<br>in Saudi Arabia</h2>
+    <p>CustomLabX is a Saudi-based custom sneaker studio founded in 2025 by a small passionate team who saw something missing in the market. Custom painted sneakers had taken off internationally — but nobody was doing it properly in Saudi Arabia. So we built it from the ground up.</p>
+    <p>We work exclusively on Nike Air Force 1s, transforming blank canvases into one-of-a-kind wearable art — all by hand, no prints, no shortcuts.</p>
+  </div>
+
+  <!-- WHAT WE DO -->
+  <div class="section reveal">
+    <div class="section-label">What We Do</div>
+    <h2>Your vision.<br><span style="color:var(--gold)">Our hands.</span></h2>
+    <p>We take your vision and paint it onto a pair of Air Force 1s. Every design is custom — meaning nothing we create is ever made twice. Whether you have a clear idea or just a feeling, we work with you from start to finish to bring it to life.</p>
+    <p>We handle every order through Instagram, where you can see our work, reach out, and place your order directly.</p>
+  </div>
+
+  <!-- HOW WE DO IT -->
+  <div class="section reveal">
+    <div class="section-label">How We Do It</div>
+    <h2>Every pair goes through<br>a careful process</h2>
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="ps-num">01</div>
+        <div class="ps-body">
+          <div class="ps-title">You reach out</div>
+          <div class="ps-desc">DM us on Instagram with your idea, reference images, or inspiration — whatever you've got.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">02</div>
+        <div class="ps-body">
+          <div class="ps-title">We plan it together</div>
+          <div class="ps-desc">We discuss the design, colors, and details until it's exactly what you want.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">03</div>
+        <div class="ps-body">
+          <div class="ps-title">We paint</div>
+          <div class="ps-desc">Fully by hand using professional-grade materials built to last.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">04</div>
+        <div class="ps-body">
+          <div class="ps-title">We deliver</div>
+          <div class="ps-desc">Fast, locally within Saudi Arabia.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">05</div>
+        <div class="ps-body">
+          <div class="ps-title">You're satisfied, or we make it right</div>
+          <div class="ps-desc">If you're not happy with the result, you can return it. That's our promise.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT MAKES US DIFFERENT -->
+  <div class="section reveal">
+    <div class="section-label">What Makes Us Different</div>
+    <h2>No compromises.<br><span style="color:var(--gold)">No shortcuts.</span></h2>
+    <div class="diff-grid">
+      <div class="diff-card">
+        <div class="diff-icon">🎨</div>
+        <div class="diff-title">100% Handpainted</div>
+        <div class="diff-desc">No digital printing, no transfers. Every stroke is done by hand.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">✦</div>
+        <div class="diff-title">Fully Custom</div>
+        <div class="diff-desc">You choose everything. Nothing is pre-made or generic.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">🛡️</div>
+        <div class="diff-title">Quality Materials</div>
+        <div class="diff-desc">Professional-grade paints that hold up over time.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">🤝</div>
+        <div class="diff-title">Reliable & Trustworthy</div>
+        <div class="diff-desc">We stand behind every pair we make.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">↩️</div>
+        <div class="diff-title">Return Policy</div>
+        <div class="diff-desc">Not satisfied? We'll make it right — that's our promise.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">⚡</div>
+        <div class="diff-title">Fast Delivery</div>
+        <div class="diff-desc">We don't keep you waiting. Local delivery within Saudi Arabia.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OUR GOAL -->
+  <div class="section reveal">
+    <div class="section-label">Our Goal</div>
+    <h2>Number one custom<br><span style="color:var(--gold)">sneaker brand in Saudi Arabia</span></h2>
+    <p>We're a startup, but we're building this seriously — one pair at a time, one happy customer at a time. Every order matters. Every pair we deliver is a step toward something bigger.</p>
+  </div>
+
+  <!-- FOLLOW US -->
+  <div class="section reveal">
+    <div class="section-label">Follow the Process</div>
+    <h2>See the work.<br>Place the order.</h2>
+    <p>On TikTok, we show you the behind-the-scenes — how the shoes actually get painted, from blank canvas to finished piece. On Instagram, we post the finished work and take orders. That's where everything happens.</p>
+    <div class="socials-row">
+      <a href="https://www.instagram.com/customlabx" target="_blank" class="social-card">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="var(--gold)" stroke="none"/></svg>
+        <div>
+          <div>@customlabx</div>
+          <div class="social-sub">Orders &amp; finished work</div>
+        </div>
+      </a>
+      <a href="https://www.tiktok.com/@customlabx" target="_blank" class="social-card">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--gold)"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+        <div>
+          <div>@customlabx</div>
+          <div class="social-sub">Behind-the-scenes</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- CLOSING BANNER -->
+<div class="closing-banner reveal">
+  <h2>Every pair is one of a kind.<br><span>Just like yours.</span></h2>
+  <p>CustomLabX — Founded 2025, Saudi Arabia.<br>Hand painted · One of a kind · Air Force 1</p>
+  <div class="cta-row">
+    <a href="customlab-order-form.html" class="cta-gold">Design Your Kicks →</a>
+    <a href="https://www.instagram.com/customlabx" target="_blank" class="cta-outline">Follow @customlabx</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="copy">© 2026 Custom Lab. All rights reserved.</span>
+  <span class="copy">Hand painted in Saudi Arabia · <a href="https://www.instagram.com/customlabx" target="_blank">@customlabx</a></span>
+</footer>
+
+</div>
+
+<script>
+document.addEventListener('mousemove', e => {
+  document.getElementById('spotlight').style.setProperty('--mx', e.clientX + 'px');
+  document.getElementById('spotlight').style.setProperty('--my', e.clientY + 'px');
+});
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+}, {passive:true});
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
+}, {threshold:.12});
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+</script>
+</body>
+</html>
