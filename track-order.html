@@ -149,6 +149,28 @@ nav.scrolled{background:rgba(13,13,13,.92);backdrop-filter:blur(20px);border-col
   .status-badges{align-items:flex-start;}
 }
 </style>
+<link rel="icon" href="logo.png">
+<style>
+.ham-btn{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:8px;flex-shrink:0;}
+.ham-btn span{display:block;width:22px;height:2px;background:rgba(255,255,255,.85);border-radius:2px;transition:transform .3s,opacity .3s;}
+.ham-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.ham-btn.open span:nth-child(2){opacity:0;}
+.ham-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mob-menu{position:fixed;inset:0;background:rgba(10,10,10,.98);z-index:9999;display:none;flex-direction:column;align-items:stretch;justify-content:center;overflow-y:auto;}
+.mob-menu.open{display:flex;}
+.mob-menu a{font-size:20px;font-weight:700;color:rgba(255,255,255,.75);text-decoration:none;padding:20px 32px;border-bottom:1px solid rgba(255,255,255,.06);text-align:center;transition:color .15s;min-height:56px;display:flex;align-items:center;justify-content:center;}
+.mob-menu a:hover,.mob-menu a.mob-active{color:var(--gold);}
+.mob-cta{background:var(--gold)!important;color:#0d0d0d!important;border-radius:100px!important;margin:24px!important;border-bottom:none!important;font-weight:800!important;}
+@media(max-width:768px){
+  nav{padding:12px 16px!important;}
+  .nav-left .nav-link{display:none!important;}
+  .nav-right,.nav-badge{display:none!important;}
+  .ham-btn{display:flex!important;}
+  .nav-logo img{height:52px!important;}
+  .hero{padding:120px 20px 60px!important;}
+  .search-card,.order-card{padding:28px 20px!important;}
+}
+</style>
 </head>
 <body>
 <div class="spotlight"></div>
@@ -162,6 +184,7 @@ nav.scrolled{background:rgba(13,13,13,.92);backdrop-filter:blur(20px);border-col
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-left">
+    <button class="ham-btn" id="hamBtn" onclick="toggleMenu()" aria-label="Open menu"><span></span><span></span><span></span></button>
     <a href="customlab-order-form.html" class="nav-link">← Order</a>
     <a href="about.html" class="nav-link">About</a>
     <a href="pricing.html" class="nav-link">Pricing</a>
@@ -178,6 +201,17 @@ nav.scrolled{background:rgba(13,13,13,.92);backdrop-filter:blur(20px);border-col
     <div class="nav-badge"><span></span>Open for orders</div>
   </div>
 </nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="customlab-order-form.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="pricing.html">Pricing</a>
+  <a href="gallery.html">Our Work</a>
+  <a href="reviews.html">Reviews</a>
+  <a href="contact.html">Contact</a>
+  <a href="terms.html">Terms</a>
+  <a href="track-order.html" class="mob-active">Track Order</a>
+  <a href="customlab-order-form.html#order" class="mob-cta">Design Your Kicks →</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -229,6 +263,8 @@ nav.scrolled{background:rgba(13,13,13,.92);backdrop-filter:blur(20px);border-col
 // Spotlight
 document.addEventListener('mousemove',e=>{document.documentElement.style.setProperty('--mx',e.clientX+'px');document.documentElement.style.setProperty('--my',e.clientY+'px');});
 
+function toggleMenu(){var btn=document.getElementById('hamBtn'),menu=document.getElementById('mobMenu'),open=btn.classList.toggle('open');menu.classList.toggle('open',open);btn.setAttribute('aria-expanded',open?'true':'false');document.body.style.overflow=open?'hidden':'';}
+document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('hamBtn').classList.remove('open');document.getElementById('mobMenu').classList.remove('open');document.body.style.overflow='';});});});
 // Nav scroll
 window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',scrollY>30);});
 
@@ -271,6 +307,8 @@ function renderProgressBar(status){
   return html;
 }
 
+function esc(s){if(s==null)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function safeSrc(url){if(!url)return'#';try{const u=new URL(url);if(u.protocol==='https:'||u.protocol==='http:')return url;}catch(e){}return'#';}
 function renderOrder(o){
   const half=o.quote_total?Number(o.quote_total)/2:null;
   const hasPay=o.quote_total!=null;
@@ -279,14 +317,14 @@ function renderOrder(o){
     <div class="order-header">
       <div class="order-num-block">
         <div class="order-num-label">Order Number</div>
-        <div class="order-num-value">${o.order_number||'—'}</div>
+        <div class="order-num-value">${esc(o.order_number)||'—'}</div>
       </div>
       <div class="status-badges">
-        <span class="badge badge-${o.order_status}">
-          <span class="badge-dot"></span>${fmtOrderStatus(o.order_status)}
+        <span class="badge badge-${esc(o.order_status)}">
+          <span class="badge-dot"></span>${esc(fmtOrderStatus(o.order_status))}
         </span>
-        <span class="badge badge-${o.payment_status}">
-          <span class="badge-dot"></span>${fmtPayStatus(o.payment_status)}
+        <span class="badge badge-${esc(o.payment_status)}">
+          <span class="badge-dot"></span>${esc(fmtPayStatus(o.payment_status))}
         </span>
       </div>
     </div>
@@ -296,19 +334,19 @@ function renderOrder(o){
     <div class="info-grid">
       <div class="info-item">
         <div class="info-label">Client Name</div>
-        <div class="info-value">${o.name||'—'}</div>
+        <div class="info-value">${esc(o.name)||'—'}</div>
       </div>
       <div class="info-item">
         <div class="info-label">Instagram</div>
-        <div class="info-value">${o.instagram?'@'+o.instagram.replace('@',''):'—'}</div>
+        <div class="info-value">${o.instagram?'@'+esc(o.instagram.replace('@','')):'—'}</div>
       </div>
       <div class="info-item">
         <div class="info-label">Shoe Size</div>
-        <div class="info-value">${o.shoe_size||'—'}</div>
+        <div class="info-value">${esc(o.shoe_size)||'—'}</div>
       </div>
       <div class="info-item">
         <div class="info-label">Gender Fit</div>
-        <div class="info-value">${o.gender_fit||'—'}</div>
+        <div class="info-value">${esc(o.gender_fit)||'—'}</div>
       </div>
       ${o.estimated_completion?`
       <div class="info-item">
@@ -324,14 +362,14 @@ function renderOrder(o){
     ${o.design_description?`
     <div class="info-full">
       <div class="info-label">Design Description</div>
-      <div class="info-value" style="margin-top:6px;color:rgba(255,255,255,.75);line-height:1.7;">${o.design_description}</div>
+      <div class="info-value" style="margin-top:6px;color:rgba(255,255,255,.75);line-height:1.7;">${esc(o.design_description)}</div>
     </div>`:''}
 
     ${o.reference_link||o.reference_image_url?`
     <div class="ref-img-box">
       <div class="info-label" style="margin-bottom:12px;">Reference</div>
-      ${o.reference_image_url?`<img src="${o.reference_image_url}" alt="Reference image"/>`:
-      o.reference_link?`<a href="${o.reference_link}" target="_blank" class="info-value" style="color:var(--gold);">View Reference Image →</a>`:''}
+      ${o.reference_image_url?`<img src="${esc(safeSrc(o.reference_image_url))}" alt="Reference image"/>`:
+      o.reference_link?`<a href="${safeSrc(o.reference_link)}" target="_blank" rel="noopener noreferrer" class="info-value" style="color:var(--gold);">View Reference Image →</a>`:''}
     </div>`:''}
 
     ${hasPay?`
@@ -355,7 +393,7 @@ function renderOrder(o){
 
     <div class="contact-cta">
       <p>Questions about your order?</p>
-      <a href="https://www.instagram.com/customlabx" target="_blank">DM us @customlabx →</a>
+      <a href="https://www.instagram.com/customlabx" target="_blank" rel="noopener noreferrer">DM us @customlabx →</a>
     </div>
   `;
   document.getElementById('orderCard').innerHTML=html;
