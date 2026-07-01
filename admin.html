@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin — CustomLabX</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--gold:#E8A830;--dark:#0d0d0d;--surface:#161616;--surface2:#1e1e1e;--border:rgba(255,255,255,.08);--text:rgba(255,255,255,.85);--muted:rgba(255,255,255,.4);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--dark);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;}
+
+/* LOGIN */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--dark);}
+.login-card{background:var(--surface);border:1px solid rgba(232,168,48,.2);border-radius:24px;padding:52px 48px;width:100%;max-width:420px;text-align:center;}
+.login-logo{font-size:28px;font-weight:800;color:var(--gold);letter-spacing:.04em;margin-bottom:8px;}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:40px;}
+.login-field{text-align:left;margin-bottom:18px;}
+.login-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.login-field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:13px 16px;color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;}
+.login-field input:focus{border-color:rgba(232,168,48,.4);}
+.login-btn{width:100%;background:var(--gold);color:#0d0d0d;border:none;border-radius:10px;padding:14px;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;transition:opacity .2s;margin-top:8px;}
+.login-btn:hover:not(:disabled){opacity:.88;}
+.login-btn:disabled{opacity:.6;cursor:not-allowed;}
+.login-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:10px 14px;font-size:13px;color:#fca5a5;margin-top:14px;display:none;text-align:left;}
+
+/* DASHBOARD */
+#dashboard{display:none;min-height:100vh;}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(13,13,13,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-left{display:flex;align-items:center;gap:16px;}
+.topbar-logo{font-size:16px;font-weight:800;color:var(--gold);}
+.topbar-divider{width:1px;height:20px;background:var(--border);}
+.topbar-title{font-size:13px;font-weight:600;color:var(--muted);}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:opacity .15s,transform .1s;}
+.btn:hover{opacity:.85;}
+.btn:active{transform:scale(.97);}
+.btn-gold{background:var(--gold);color:#0d0d0d;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-outline:hover{color:var(--text);border-color:rgba(255,255,255,.2);}
+.btn-danger{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:#fca5a5;}
+.btn-sm{padding:5px 12px;font-size:12px;}
+
+/* CONTENT */
+.content{max-width:1200px;margin:0 auto;padding:32px;}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:32px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 24px;}
+.stat-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.stat-value{font-size:28px;font-weight:800;color:var(--text);}
+.stat-value.gold{color:var(--gold);}
+
+/* TABLE */
+.table-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap;}
+.table-header h2{font-size:18px;font-weight:700;}
+.table-search{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:inherit;font-size:13px;outline:none;width:220px;transition:border-color .2s;}
+.table-search:focus{border-color:rgba(232,168,48,.3);}
+.table-search::placeholder{color:var(--muted);}
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+th{padding:12px 16px;text-align:left;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);background:rgba(255,255,255,.02);white-space:nowrap;}
+td{padding:14px 16px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.015);}
+.td-order-num{font-weight:800;color:var(--gold);letter-spacing:.04em;font-size:14px;}
+.td-name{font-weight:600;}
+.td-ig{color:var(--muted);}
+.td-actions{display:flex;gap:8px;align-items:center;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-state div{font-size:40px;margin-bottom:16px;}
+.empty-state p{font-size:14px;}
+.table-loading{text-align:center;padding:40px;color:var(--muted);font-size:13px;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap;}
+.badge-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.s-order_received{background:rgba(59,130,246,.12);color:#93c5fd;}.s-order_received .badge-dot{background:#3b82f6;}
+.s-in_progress{background:rgba(245,158,11,.12);color:#fcd34d;}.s-in_progress .badge-dot{background:#f59e0b;}
+.s-painting{background:rgba(168,85,247,.12);color:#d8b4fe;}.s-painting .badge-dot{background:#a855f7;}
+.s-ready_for_pickup{background:rgba(20,184,166,.12);color:#5eead4;}.s-ready_for_pickup .badge-dot{background:#14b8a6;}
+.s-completed{background:rgba(34,197,94,.12);color:#86efac;}.s-completed .badge-dot{background:#22c55e;}
+.p-unpaid{background:rgba(239,68,68,.12);color:#fca5a5;}.p-unpaid .badge-dot{background:#ef4444;}
+.p-downpayment_received{background:rgba(245,158,11,.12);color:#fcd34d;}.p-downpayment_received .badge-dot{background:#f59e0b;}
+.p-fully_paid{background:rgba(34,197,94,.12);color:#86efac;}.p-fully_paid .badge-dot{background:#22c55e;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid rgba(232,168,48,.2);border-radius:20px;padding:36px;width:100%;max-width:560px;position:relative;flex-shrink:0;}
+.modal-title{font-size:20px;font-weight:800;margin-bottom:8px;}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:32px;}
+.modal-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.06);border:none;color:var(--muted);cursor:pointer;width:32px;height:32px;border-radius:50%;font-size:18px;display:flex;align-items:center;justify-content:center;}
+.modal-close:hover{background:rgba(255,255,255,.1);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-field{display:flex;flex-direction:column;gap:6px;}
+.form-field.full{grid-column:1/-1;}
+.form-field label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.form-field input,.form-field textarea,.form-field select{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;width:100%;}
+.form-field input:focus,.form-field textarea:focus,.form-field select:focus{border-color:rgba(232,168,48,.4);}
+.form-field select option{background:#1e1e1e;color:var(--text);}
+.form-field textarea{resize:vertical;min-height:90px;}
+.form-field input::placeholder,.form-field textarea::placeholder{color:rgba(255,255,255,.2);font-weight:400;}
+.modal-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:28px;}
+.modal-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:10px 14px;font-size:13px;color:#fca5a5;margin-top:16px;display:none;}
+
+/* SUCCESS BANNER (after order create) */
+.success-banner{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:14px;padding:24px 28px;margin-bottom:28px;display:none;}
+.success-banner h3{font-size:16px;font-weight:700;color:#86efac;margin-bottom:8px;}
+.success-banner .order-num-big{font-size:36px;font-weight:800;color:#22c55e;letter-spacing:.06em;margin:12px 0;}
+.success-banner p{font-size:13px;color:rgba(134,239,172,.7);}
+.copy-btn{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.25);color:#86efac;border-radius:8px;padding:8px 16px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;margin-top:12px;transition:background .2s;}
+.copy-btn:hover{background:rgba(34,197,94,.25);}
+
+/* CONFIRM */
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;display:none;align-items:center;justify-content:center;}
+.confirm-overlay.open{display:flex;}
+.confirm-box{background:var(--surface);border:1px solid rgba(239,68,68,.25);border-radius:16px;padding:32px;max-width:360px;width:100%;text-align:center;}
+.confirm-box h3{font-size:18px;font-weight:700;margin-bottom:12px;}
+.confirm-box p{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+.confirm-actions{display:flex;gap:12px;justify-content:center;}
+
+@media(max-width:640px){
+  .content{padding:20px;}
+  .form-grid{grid-template-columns:1fr;}
+  table{font-size:12px;}
+  th,td{padding:10px 12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">CustomLabX</div>
+    <div class="login-sub">Admin Panel</div>
+    <div class="login-field">
+      <label>Email</label>
+      <input id="loginEmail" type="email" placeholder="admin@customlabx.com" autocomplete="email"/>
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Sign In →</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">CustomLabX</div>
+      <div class="topbar-divider"></div>
+      <div class="topbar-title">Admin Panel</div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-gold" onclick="openCreate()">+ New Order</button>
+      <button class="btn btn-outline" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Success banner (after create) -->
+    <div class="success-banner" id="successBanner">
+      <h3>✓ Order Created!</h3>
+      <div>Send this order number to your client via Instagram DM:</div>
+      <div class="order-num-big" id="newOrderNum">—</div>
+      <p>Client uses this + their name to track their order at <strong>customlabx-store.vercel.app/track-order.html</strong></p>
+      <button class="copy-btn" onclick="copyOrderNum()">📋 Copy Order Number</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats" id="statsRow">
+      <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value gold" id="statTotal">—</div></div>
+      <div class="stat-card"><div class="stat-label">In Progress</div><div class="stat-value" id="statInProgress">—</div></div>
+      <div class="stat-card"><div class="stat-label">Ready for Pickup</div><div class="stat-value" id="statReady">—</div></div>
+      <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="statCompleted">—</div></div>
+    </div>
+
+    <!-- Orders table -->
+    <div class="table-header">
+      <h2>Orders</h2>
+      <input class="table-search" id="tableSearch" type="text" placeholder="Search name, order #, IG…" oninput="filterTable()"/>
+    </div>
+    <div class="table-wrap">
+      <div class="table-loading" id="tableLoading">Loading orders…</div>
+      <table id="ordersTable" style="display:none">
+        <thead>
+          <tr>
+            <th>Order #</th>
+            <th>Name</th>
+            <th>Instagram</th>
+            <th>Order Status</th>
+            <th>Payment</th>
+            <th>Quote</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display:none">
+        <div>📦</div>
+        <p>No orders yet. Click <strong>+ New Order</strong> to create one.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE MODAL -->
+<div class="modal-overlay" id="createModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCreate()">×</button>
+    <div class="modal-title">New Order</div>
+    <div class="modal-sub">Fill in the client's details from their Instagram DM.</div>
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Client Name *</label>
+        <input id="c_name" type="text" placeholder="Full name"/>
+      </div>
+      <div class="form-field">
+        <label>Instagram Handle</label>
+        <input id="c_instagram" type="text" placeholder="@handle (no @)"/>
+      </div>
+      <div class="form-field">
+        <label>Shoe Size</label>
+        <input id="c_shoe_size" type="text" placeholder="e.g. EU 42"/>
+      </div>
+      <div class="form-field">
+        <label>Gender Fit</label>
+        <select id="c_gender_fit">
+          <option value="">Select…</option>
+          <option value="Men">Men</option>
+          <option value="Women">Women</option>
+          <option value="Unisex">Unisex</option>
+          <option value="Kids">Kids</option>
+        </select>
+      </div>
+      <div class="form-field full">
+        <label>Design Description</label>
+        <textarea id="c_design_description" placeholder="Describe the design the client wants…"></textarea>
+      </div>
+      <div class="form-field">
+        <label>Quote Total (SAR)</label>
+        <input id="c_quote_total" type="number" min="0" step="50" placeholder="e.g. 850"/>
+      </div>
+      <div class="form-field">
+        <label>Est. Completion Date</label>
+        <input id="c_estimated_completion" type="date"/>
+      </div>
+      <div class="form-field full">
+        <label>Reference Image URL (optional)</label>
+        <input id="c_reference_image_url" type="url" placeholder="https://…"/>
+      </div>
+      <div class="form-field full">
+        <label>Admin Notes (private — never shown to client)</label>
+        <textarea id="c_admin_notes" placeholder="Internal notes…"></textarea>
+      </div>
+    </div>
+    <div class="modal-err" id="createErr"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeCreate()">Cancel</button>
+      <button class="btn btn-gold" id="createBtn" onclick="submitCreate()">Create Order →</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeEdit()">×</button>
+    <div class="modal-title">Edit Order</div>
+    <div class="modal-sub" id="editModalSub">Update order details.</div>
+    <input type="hidden" id="e_id"/>
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Client Name *</label>
+        <input id="e_name" type="text"/>
+      </div>
+      <div class="form-field">
+        <label>Instagram Handle</label>
+        <input id="e_instagram" type="text"/>
+      </div>
+      <div class="form-field">
+        <label>Shoe Size</label>
+        <input id="e_shoe_size" type="text"/>
+      </div>
+      <div class="form-field">
+        <label>Gender Fit</label>
+        <select id="e_gender_fit">
+          <option value="">Select…</option>
+          <option value="Men">Men</option>
+          <option value="Women">Women</option>
+          <option value="Unisex">Unisex</option>
+          <option value="Kids">Kids</option>
+        </select>
+      </div>
+      <div class="form-field full">
+        <label>Design Description</label>
+        <textarea id="e_design_description"></textarea>
+      </div>
+      <div class="form-field">
+        <label>Quote Total (SAR)</label>
+        <input id="e_quote_total" type="number" min="0" step="50"/>
+      </div>
+      <div class="form-field">
+        <label>Est. Completion Date</label>
+        <input id="e_estimated_completion" type="date"/>
+      </div>
+      <div class="form-field">
+        <label>Order Status</label>
+        <select id="e_order_status">
+          <option value="order_received">Order Received</option>
+          <option value="in_progress">In Progress</option>
+          <option value="painting">Painting</option>
+          <option value="ready_for_pickup">Ready for Pickup</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Payment Status</label>
+        <select id="e_payment_status">
+          <option value="unpaid">Unpaid</option>
+          <option value="downpayment_received">Downpayment Received</option>
+          <option value="fully_paid">Fully Paid</option>
+        </select>
+      </div>
+      <div class="form-field full">
+        <label>Reference Image URL</label>
+        <input id="e_reference_image_url" type="url"/>
+      </div>
+      <div class="form-field full">
+        <label>Admin Notes (private)</label>
+        <textarea id="e_admin_notes"></textarea>
+      </div>
+    </div>
+    <div class="modal-err" id="editErr"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeEdit()">Cancel</button>
+      <button class="btn btn-gold" id="editBtn" onclick="submitEdit()">Save Changes →</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h3>Delete Order?</h3>
+    <p id="confirmMsg">This action cannot be undone.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-outline" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SB_URL='https://chtlvevmvoqkskvrlona.supabase.co';
+const SB_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNodGx2ZXZtdm9xa3NrdnJsb25hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1ODczMjksImV4cCI6MjA5ODE2MzMyOX0.EjFm2-T7lCGPFREoP1b1Oi8bT2lFQEoCkLtPnhq9k5o';
+
+let allOrders=[];
+let deleteTargetId=null;
+
+// ── AUTH ──
+function getToken(){return sessionStorage.getItem('clx_admin_token');}
+function setToken(t){sessionStorage.setItem('clx_admin_token',t);}
+function clearToken(){sessionStorage.removeItem('clx_admin_token');}
+
+function authHeaders(){
+  return {'apikey':SB_ANON,'Authorization':'Bearer '+getToken(),'Content-Type':'application/json'};
+}
+
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPass').value;
+  const btn=document.getElementById('loginBtn');
+  const err=document.getElementById('loginErr');
+  err.style.display='none';
+  if(!email||!pass){err.textContent='Enter email and password.';err.style.display='block';return;}
+  btn.disabled=true;btn.textContent='Signing in…';
+  try{
+    const r=await fetch(`${SB_URL}/auth/v1/token?grant_type=password`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SB_ANON},
+      body:JSON.stringify({email,password:pass})
+    });
+    const data=await r.json();
+    if(!r.ok||data.error){
+      err.textContent=data.error_description||data.error||'Login failed.';
+      err.style.display='block';
+      return;
+    }
+    setToken(data.access_token);
+    showDashboard();
+  } catch{
+    err.textContent='Network error. Please try again.';err.style.display='block';
+  } finally{
+    btn.disabled=false;btn.textContent='Sign In →';
+  }
+}
+
+async function doLogout(){
+  try{
+    await fetch(`${SB_URL}/auth/v1/logout`,{
+      method:'POST',
+      headers:{'apikey':SB_ANON,'Authorization':'Bearer '+getToken()}
+    });
+  } catch{}
+  clearToken();
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+}
+
+function handle401(){clearToken();doLogout();}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+  if(getToken()) showDashboard();
+});
+
+function showDashboard(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  loadOrders();
+}
+
+// ── ORDERS ──
+async function loadOrders(){
+  document.getElementById('tableLoading').style.display='block';
+  document.getElementById('ordersTable').style.display='none';
+  document.getElementById('emptyState').style.display='none';
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/orders?select=*&order=created_at.desc`,{
+      headers:{...authHeaders(),'Content-Type':undefined}
+    });
+    if(r.status===401){handle401();return;}
+    const data=await r.json();
+    allOrders=Array.isArray(data)?data:[];
+    updateStats();
+    renderTable(allOrders);
+  } catch{
+    document.getElementById('tableLoading').textContent='Failed to load orders.';
+  }
+}
+
+function updateStats(){
+  document.getElementById('statTotal').textContent=allOrders.length;
+  document.getElementById('statInProgress').textContent=allOrders.filter(o=>o.order_status==='in_progress'||o.order_status==='painting').length;
+  document.getElementById('statReady').textContent=allOrders.filter(o=>o.order_status==='ready_for_pickup').length;
+  document.getElementById('statCompleted').textContent=allOrders.filter(o=>o.order_status==='completed').length;
+}
+
+function fmtStatus(s){
+  return{order_received:'Order Received',in_progress:'In Progress',painting:'Painting',ready_for_pickup:'Ready for Pickup',completed:'Completed'}[s]||s;
+}
+function fmtPay(s){
+  return{unpaid:'Unpaid',downpayment_received:'Downpayment Rcvd',fully_paid:'Fully Paid'}[s]||s;
+}
+function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-SA',{year:'numeric',month:'short',day:'numeric'});}
+function fmtSAR(n){if(n==null)return'—';return Number(n).toLocaleString('en',{minimumFractionDigits:0})+ ' SAR';}
+
+function renderTable(orders){
+  document.getElementById('tableLoading').style.display='none';
+  if(!orders.length){
+    document.getElementById('emptyState').style.display='block';
+    document.getElementById('ordersTable').style.display='none';
+    return;
+  }
+  document.getElementById('ordersTable').style.display='table';
+  document.getElementById('emptyState').style.display='none';
+  const body=document.getElementById('ordersBody');
+  body.innerHTML=orders.map(o=>`
+    <tr data-id="${o.id}">
+      <td class="td-order-num">${o.order_number||'—'}</td>
+      <td class="td-name">${o.name||'—'}</td>
+      <td class="td-ig">${o.instagram?'@'+o.instagram:''}</td>
+      <td><span class="badge s-${o.order_status}"><span class="badge-dot"></span>${fmtStatus(o.order_status)}</span></td>
+      <td><span class="badge p-${o.payment_status}"><span class="badge-dot"></span>${fmtPay(o.payment_status)}</span></td>
+      <td>${fmtSAR(o.quote_total)}</td>
+      <td style="white-space:nowrap">${fmtDate(o.created_at)}</td>
+      <td class="td-actions">
+        <button class="btn btn-outline btn-sm" onclick="openEdit('${o.id}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="openConfirm('${o.id}','${(o.order_number||'').replace(/'/g,"\\'")}')">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterTable(){
+  const q=document.getElementById('tableSearch').value.toLowerCase();
+  if(!q){renderTable(allOrders);return;}
+  const filtered=allOrders.filter(o=>(o.name||'').toLowerCase().includes(q)||(o.order_number||'').toLowerCase().includes(q)||(o.instagram||'').toLowerCase().includes(q));
+  renderTable(filtered);
+}
+
+// ── CREATE ──
+function openCreate(){
+  document.getElementById('createModal').classList.add('open');
+  document.getElementById('c_name').focus();
+  document.getElementById('createErr').style.display='none';
+  ['c_name','c_instagram','c_shoe_size','c_design_description','c_quote_total','c_estimated_completion','c_reference_image_url','c_admin_notes'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value='';
+  });
+  document.getElementById('c_gender_fit').value='';
+}
+function closeCreate(){document.getElementById('createModal').classList.remove('open');}
+
+async function submitCreate(){
+  const name=document.getElementById('c_name').value.trim();
+  const err=document.getElementById('createErr');
+  err.style.display='none';
+  if(!name){err.textContent='Client name is required.';err.style.display='block';return;}
+
+  const btn=document.getElementById('createBtn');
+  btn.disabled=true;btn.textContent='Creating…';
+
+  const body={
+    name,
+    instagram:(document.getElementById('c_instagram').value.trim().replace(/^@/,'')||null),
+    shoe_size:(document.getElementById('c_shoe_size').value.trim()||null),
+    gender_fit:(document.getElementById('c_gender_fit').value||null),
+    design_description:(document.getElementById('c_design_description').value.trim()||null),
+    quote_total:(document.getElementById('c_quote_total').value?Number(document.getElementById('c_quote_total').value):null),
+    estimated_completion:(document.getElementById('c_estimated_completion').value||null),
+    reference_image_url:(document.getElementById('c_reference_image_url').value.trim()||null),
+    admin_notes:(document.getElementById('c_admin_notes').value.trim()||null),
+    terms_accepted:false
+  };
+
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/orders`,{
+      method:'POST',
+      headers:{...authHeaders(),'Prefer':'return=representation'},
+      body:JSON.stringify(body)
+    });
+    if(r.status===401){handle401();return;}
+    const data=await r.json();
+    if(!r.ok){err.textContent=data.message||'Failed to create order.';err.style.display='block';return;}
+    const created=Array.isArray(data)?data[0]:data;
+    closeCreate();
+    const banner=document.getElementById('successBanner');
+    document.getElementById('newOrderNum').textContent=created.order_number||'—';
+    banner.style.display='block';
+    banner.scrollIntoView({behavior:'smooth',block:'start'});
+    await loadOrders();
+  } catch{
+    err.textContent='Network error. Please try again.';err.style.display='block';
+  } finally{
+    btn.disabled=false;btn.textContent='Create Order →';
+  }
+}
+
+function copyOrderNum(){
+  const num=document.getElementById('newOrderNum').textContent;
+  navigator.clipboard.writeText(num).then(()=>{
+    const btn=document.querySelector('.copy-btn');
+    btn.textContent='✓ Copied!';
+    setTimeout(()=>{btn.textContent='📋 Copy Order Number';},2000);
+  });
+}
+
+// ── EDIT ──
+function openEdit(id){
+  const o=allOrders.find(x=>x.id===id);
+  if(!o)return;
+  document.getElementById('editModal').classList.add('open');
+  document.getElementById('editModalSub').textContent=`Order ${o.order_number||id}`;
+  document.getElementById('e_id').value=o.id;
+  document.getElementById('e_name').value=o.name||'';
+  document.getElementById('e_instagram').value=o.instagram||'';
+  document.getElementById('e_shoe_size').value=o.shoe_size||'';
+  document.getElementById('e_gender_fit').value=o.gender_fit||'';
+  document.getElementById('e_design_description').value=o.design_description||'';
+  document.getElementById('e_quote_total').value=o.quote_total!=null?o.quote_total:'';
+  document.getElementById('e_estimated_completion').value=o.estimated_completion||'';
+  document.getElementById('e_order_status').value=o.order_status||'order_received';
+  document.getElementById('e_payment_status').value=o.payment_status||'unpaid';
+  document.getElementById('e_reference_image_url').value=o.reference_image_url||'';
+  document.getElementById('e_admin_notes').value=o.admin_notes||'';
+  document.getElementById('editErr').style.display='none';
+}
+function closeEdit(){document.getElementById('editModal').classList.remove('open');}
+
+async function submitEdit(){
+  const id=document.getElementById('e_id').value;
+  const name=document.getElementById('e_name').value.trim();
+  const err=document.getElementById('editErr');
+  err.style.display='none';
+  if(!name){err.textContent='Client name is required.';err.style.display='block';return;}
+
+  const btn=document.getElementById('editBtn');
+  btn.disabled=true;btn.textContent='Saving…';
+
+  const body={
+    name,
+    instagram:(document.getElementById('e_instagram').value.trim().replace(/^@/,'')||null),
+    shoe_size:(document.getElementById('e_shoe_size').value.trim()||null),
+    gender_fit:(document.getElementById('e_gender_fit').value||null),
+    design_description:(document.getElementById('e_design_description').value.trim()||null),
+    quote_total:(document.getElementById('e_quote_total').value!==''?Number(document.getElementById('e_quote_total').value):null),
+    estimated_completion:(document.getElementById('e_estimated_completion').value||null),
+    order_status:document.getElementById('e_order_status').value,
+    payment_status:document.getElementById('e_payment_status').value,
+    reference_image_url:(document.getElementById('e_reference_image_url').value.trim()||null),
+    admin_notes:(document.getElementById('e_admin_notes').value.trim()||null)
+  };
+
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/orders?id=eq.${id}`,{
+      method:'PATCH',
+      headers:{...authHeaders(),'Prefer':'return=representation'},
+      body:JSON.stringify(body)
+    });
+    if(r.status===401){handle401();return;}
+    if(!r.ok){const d=await r.json();err.textContent=d.message||'Failed to update.';err.style.display='block';return;}
+    closeEdit();
+    await loadOrders();
+  } catch{
+    err.textContent='Network error. Please try again.';err.style.display='block';
+  } finally{
+    btn.disabled=false;btn.textContent='Save Changes →';
+  }
+}
+
+// ── DELETE ──
+function openConfirm(id,orderNum){
+  deleteTargetId=id;
+  document.getElementById('confirmMsg').textContent=`Delete order ${orderNum}? This cannot be undone.`;
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+function closeConfirm(){document.getElementById('confirmOverlay').classList.remove('open');deleteTargetId=null;}
+
+async function confirmDelete(){
+  if(!deleteTargetId)return;
+  const btn=document.getElementById('confirmDeleteBtn');
+  btn.disabled=true;btn.textContent='Deleting…';
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/orders?id=eq.${deleteTargetId}`,{
+      method:'DELETE',
+      headers:{...authHeaders(),'Content-Type':undefined}
+    });
+    if(r.status===401){handle401();return;}
+    closeConfirm();
+    await loadOrders();
+  } catch{
+    alert('Failed to delete. Please try again.');
+  } finally{
+    btn.disabled=false;btn.textContent='Delete';
+  }
+}
+
+// Close modals on overlay click
+document.getElementById('createModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeCreate();});
+document.getElementById('editModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeEdit();});
+document.getElementById('confirmOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeConfirm();});
+</script>
+</body>
+</html>
